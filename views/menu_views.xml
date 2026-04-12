@@ -1,3 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+<!-- root menu -->
+    <menuitem id="menu_spa_root"
+        name="Spa"
+        web_icon="v13_spa_ms,static/description/icon.png"
+        action="action_spa_order"
+        sequence="2"/>
+    
+<!-- sub root menu -->
+    <menuitem id="menu_spa_order_parent"
+        name="Orders"
+        parent="menu_spa_root"
+        sequence="0"/>
+
+    <menuitem id="menu_spa_master_data_parent"
+        name="Master Data"
+        parent="menu_spa_root"
+        sequence="5"/>
+
+<!-- Spa > Orders > Orders -->
+
+    <menuitem id="menu_spa_order"
+        name="Orders"
+        parent="menu_spa_order_parent"
+        action="action_spa_order"
+        sequence="0"/>
+
+<!-- Spa > Orders > Sessions -->
+     <menuitem id="menu_spa_session"
+        name="Sessions"
+        parent="menu_spa_order_parent"
+        action="action_spa_session"
+        sequence="5"/>
+
+<!-- Spa > Master Data > Customers -->
+    <menuitem id="menu_spa_customer"
+            name="Customer"
+            parent="menu_spa_master_data_parent"
+            action="contacts.action_contacts"
+            sequence="0"/>
+
+<!-- Spa > Master Data > Therapist -->
+    <menuitem id="menu_spa_therapist"
+            name="Therapist"
+            parent="menu_spa_master_data_parent"
+            action="action_spa_therapist"
+            sequence="5"/>
+
+<!-- Spa > Master Data > Treatments -->
 </odoo>

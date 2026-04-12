@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_spa_therapist" model="ir.actions.act_window">
+        <field name="name">Therapist</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_therapist','=',True)]</field>
+        <field name="context">{'default_is_therapist': True}</field>
+    </record>
+
+</odoo>

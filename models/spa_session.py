@@ -3,6 +3,7 @@ from odoo import fields, models, api
 class SpaSession(models.Model):
     _name = "spa.session"
     _description = "Spa Session"
+    _order = "id desc"
 
     order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
     product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True)

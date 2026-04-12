@@ -20,10 +20,14 @@
     "data": [
         #security
         "security/security.xml",
-        # "security/ir.model.access.csv",
+        "security/ir.model.access.csv",
 
         #views
+        "views/spa_order_views.xml",
+        "views/spa_session_views.xml",
+        "views/partner_views.xml",
         "views/menu_views.xml",
+        
     ],
 
     "installable": True,
