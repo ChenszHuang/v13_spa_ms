@@ -1,11 +1,23 @@
 from odoo import fields, models, api
-
+from ..tools import const
 
 class ResPartner(models.Model):
-    _name = "res.partner"
     _inherit = "res.partner"
     
+    number = fields.Char(string="Therapist No.", readonly=True, tracking=True, copy=False)
+    nickname = fields.Char(string="Nickname")
+    gender = fields.Selection(const.GENDER_SELECTION, string="Gender", tracking=True)
+    birthday = fields.Date(string="Date of Birth", tracking=True)
+    marital = fields.Selection([
+		("single", "Single"),
+		("married", "Married"),
+		("widowed", "Widowed"),
+		("divorced", "Divorced"),
+		], "Marital Status")
     is_therapist = fields.Boolean("Is Therapist", tracking=True, copy=False)
+    is_travel_agent = fields.Boolean("Is Travel Agent", tracking=True, copy=False)
+    join_date = fields.Date(string="Join Date", tracking=True, copy=False)
+    therapist_code = fields.Char(string="Therapist ID", tracking=True, copy=False)
     
     
     @api.model
