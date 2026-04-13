@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_company_form">
+        <field name="name">view.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[1]" position="after">
+                <page string="Configuration">
+                    <group>
+                        <group string="Accounting">
+                            <field name="default_account_receivable"/>
+                            <field name="default_account_payable"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

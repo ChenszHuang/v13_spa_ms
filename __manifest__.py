@@ -21,12 +21,16 @@
         #security
         "security/security.xml",
         "security/ir.model.access.csv",
+        
+        #data
+        "data/admin_data.xml",
 
         #views
         "views/spa_order_views.xml",
         "views/spa_session_views.xml",
         "views/partner_views.xml",
         "views/menu_views.xml",
+        "views/company_views.xml",
         
     ],
 

@@ -1,0 +1,6 @@
+<odoo>
+    <record id="base.user_admin" model="res.users">
+        <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+        <field name="groups_id" eval="[(4, ref('v13_spa_ms.group_erp_manager'))]"/>
+    </record>
+</odoo>
