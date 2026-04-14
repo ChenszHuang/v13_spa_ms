@@ -18,7 +18,7 @@
 
     <record id="view_product_treatment_form" model="ir.ui.view">
         <field name="name">product.template.treatment.form</field>
-        <field name="model">product.template</field>    
+        <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view" />
         <field name="mode">primary</field>
         <field name="priority">999</field>
@@ -93,26 +93,31 @@
             <form string="Treatment Type">
                 <sheet>
                     <div class="oe_title">
-                            <field name="id" invisible="1" />
-                         
-                            <h1 style="max-width: 90%;">
-                                    <field name="name"
-                                        default_focus="1"
-                                        placeholder="Name"/>
-                            </h1>
-                        </div>
+                        <field name="id" invisible="1" />
 
-                        <group col="4" >
-                            <group colspan="2">
-                                <field name="code"/>
-                            </group>
-                            
-                        </group>
+                        <h1 style="max-width: 90%;">
+                            <field name="name" default_focus="1" placeholder="Name"/>
+                        </h1>
+                    </div>
+
+                    <group col="4">
                         <group colspan="2">
-                            <label for="treatment_ids"/> 
-                            <newline/>
-                            <field name="treatment_ids" nolabel="1" readonly="1"/>
+                            <field name="code"/>
                         </group>
+
+                    </group>
+                    <group colspan="2">
+                        <label for="treatment_ids"/>
+                        <newline/>
+                        <field name="treatment_ids" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="treatment_code"/>
+                                <field name="name"/>
+                                <field name="duration"/>
+                                <field name="list_price"/>
+                            </tree>
+                        </field>
+                    </group>
 
                 </sheet>
             </form>
@@ -123,8 +128,7 @@
         <field name="name">Treatments</field>
         <field name="res_model">product.template</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_ids"
-			eval="[(5, 0, 0),
+        <field name="view_ids" eval="[(5, 0, 0),
 		(0, 0, {'view_mode': 'tree', 'view_id': ref('view_product_treatment_tree')}),
 		(0, 0, {'view_mode': 'form', 'view_id': ref('view_product_treatment_form')})
 		]" />

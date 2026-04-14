@@ -7,12 +7,16 @@
         <field name="arch" type="xml">
             <xpath expr="//page[1]" position="after">
                 <page string="Configuration">
-                    <group>
-                        <group string="Accounting">
+                    <group col="4">
+                        <group string="Accounting" colspan="2">
                             <field name="default_account_receivable"/>
                             <field name="default_account_payable"/>
                             <field name="default_property_account_income_id"/>
                             <field name="default_property_account_expense_id"/>
+                            <field name="default_invoice_payment_term_id"/>
+                        </group>
+                        <group string="Journals" colspan="2">
+                            <field name="default_invoice_journal_id"/>
                         </group>
                     </group>
                 </page>

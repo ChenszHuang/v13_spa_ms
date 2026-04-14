@@ -9,7 +9,7 @@ class SpaSession(models.Model):
 
     spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
     product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True)
-    therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True, domain="[('is_therapist','=',True), ('id','not in', unavailable_therapist_ids)]")
+    therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True)
     unavailable_therapist_ids = fields.Many2many("res.partner",compute="_compute_unavailable_therapist")
     state = fields.Selection([
         ("draft", "Draft"),
@@ -24,7 +24,7 @@ class SpaSession(models.Model):
 
     #api.depends
 
-    @api.depends('start_time', 'end_time')
+    @api.depends('start_time', 'end_time', 'spa_order_id.spa_session_ids.therapist_id')
     def _compute_unavailable_therapist(self):
         for record in self:
             domain = [
@@ -36,7 +36,11 @@ class SpaSession(models.Model):
                 domain.append(('id', '!=', record.id))
 
             sessions = self.env['spa.session'].search(domain)
-            record.unavailable_therapist_ids = sessions.mapped('therapist_id')
+            busy_therapists = sessions.mapped('therapist_id')
+
+            used_therapists = record.spa_order_id.spa_session_ids.filtered(lambda s: s.id != record.id).mapped('therapist_id')
+            
+            record.unavailable_therapist_ids = busy_therapists | used_therapists
 
     @api.depends('start_time', 'product_id')
     def _compute_end_time(self):

@@ -31,6 +31,7 @@
         "views/spa_session_views.xml",
         "views/partner_views.xml",
         "views/product_views.xml",
+        "views/account_move.xml",
         "views/menu_views.xml",
         "views/company_views.xml",
         
