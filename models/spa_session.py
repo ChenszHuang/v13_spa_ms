@@ -7,7 +7,7 @@ class SpaSession(models.Model):
     _description = "Spa Session"
     _order = "id desc"
 
-    order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
+    spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
     product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True)
     therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True, domain="[('is_therapist','=',True), ('id','not in', unavailable_therapist_ids)]")
     unavailable_therapist_ids = fields.Many2many("res.partner",compute="_compute_unavailable_therapist")
