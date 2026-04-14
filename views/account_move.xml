@@ -3,10 +3,7 @@
     <record id="action_spa_invoice" model="ir.actions.act_window">
         <field name="name">Invoices</field>
         <field name="res_model">account.move</field>
-    </record>
-
-    <record id="action_spa_payment" model="ir.actions.act_window">
-        <field name="name">Payments</field>
-        <field name="res_model">account.payment</field>
+        <field name="domain">[('type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_type': 'out_invoice', 'journal_type': 'sale'}</field>
     </record>
 </odoo>

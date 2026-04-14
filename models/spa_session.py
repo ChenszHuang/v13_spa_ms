@@ -10,7 +10,6 @@ class SpaSession(models.Model):
     spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
     product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True)
     therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True)
-    unavailable_therapist_ids = fields.Many2many("res.partner",compute="_compute_unavailable_therapist")
     state = fields.Selection([
         ("draft", "Draft"),
         ("wait", "Waiting"),
@@ -22,25 +21,34 @@ class SpaSession(models.Model):
     end_time = fields.Datetime(string="End Time", compute="_compute_end_time", store=True, tracking=True, copy=False)
 
 
-    #api.depends
+    #api decorator
 
-    @api.depends('start_time', 'end_time', 'spa_order_id.spa_session_ids.therapist_id')
-    def _compute_unavailable_therapist(self):
+    @api.constrains('start_time', 'product_id', 'therapist_id')
+    def _check_therapist_availability(self):
         for record in self:
+            if not record.start_time or not record.product_id or not record.therapist_id:
+                continue
+
+            end_time = record.start_time + timedelta(minutes=record.product_id.duration or 0)
+
             domain = [
+                ('therapist_id', '=', record.therapist_id.id),
                 ('state', 'in', ['wait', 'ongoing']),
-                ('start_time', '<', record.end_time),
+                ('start_time', '<', end_time),
                 ('end_time', '>', record.start_time),
             ]
+
             if record.id:
                 domain.append(('id', '!=', record.id))
 
-            sessions = self.env['spa.session'].search(domain)
-            busy_therapists = sessions.mapped('therapist_id')
-
-            used_therapists = record.spa_order_id.spa_session_ids.filtered(lambda s: s.id != record.id).mapped('therapist_id')
-            
-            record.unavailable_therapist_ids = busy_therapists | used_therapists
+            conflict = self.env['spa.session'].search(domain, limit=1)
+            if conflict:
+                raise ValidationError(
+                    f"Therapist {record.therapist_id.name} sudah memiliki sesi pada "
+                    f"{conflict.start_time.strftime('%d/%m/%Y %H:%M')} - "
+                    f"{conflict.end_time.strftime('%H:%M')}. "
+                    f"Silakan pilih therapist lain atau ubah waktu."
+                )
 
     @api.depends('start_time', 'product_id')
     def _compute_end_time(self):

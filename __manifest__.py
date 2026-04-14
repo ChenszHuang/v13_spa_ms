@@ -14,7 +14,7 @@
         "base",
         "contacts",
         "product",
-        "account"
+        "account",
         ],
 
     "data": [
@@ -32,6 +32,7 @@
         "views/partner_views.xml",
         "views/product_views.xml",
         "views/account_move.xml",
+        "views/account_payment.xml",
         "views/menu_views.xml",
         "views/company_views.xml",
         

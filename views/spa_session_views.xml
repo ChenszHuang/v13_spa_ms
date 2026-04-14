@@ -34,7 +34,6 @@
                         <field name="end_time"/>
                     </group>
 
-                    <field name="unavailable_therapist_ids" invisible="1"/>
                 </sheet>
             </form>
         </field>
