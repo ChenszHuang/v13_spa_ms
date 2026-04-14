@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from odoo.osv import expression
 
 
 
@@ -13,6 +14,7 @@ class TreatmentType(models.Model):
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
+    _order = "name asc"
 
     treatment_code = fields.Char("Treatment Code", required=True, tracking=True, copy=False) 
     duration = fields.Integer(string="Treatment Duration", required=True, tracking=True, copy=False, help="Treatment duration in minutes")
@@ -30,3 +32,32 @@ class ProductTemplate(models.Model):
             res['property_account_expense_id'] = company.default_property_account_expense_id.id
         return res
 
+class ProductProduct(models.Model):
+    _inherit = "product.product"
+    _order = "name asc"
+
+    
+    def name_get(self):
+        result = []
+        for rec in self:
+            name = rec.name or ''
+            code = rec.product_tmpl_id.treatment_code
+            if code:
+                name = f"[{code}] {name}"
+            result.append((rec.id, name))
+        return result
+
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args or []
+
+        if name:
+            domain = ['|',
+                ('name', operator, name),
+                ('product_tmpl_id.treatment_code', operator, name)
+            ]
+            products = self.search(expression.AND([domain, args]), limit=limit)
+        else:
+            products = self.search(args, limit=limit)
+
+        return products.name_get()
