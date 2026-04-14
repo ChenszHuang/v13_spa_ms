@@ -24,11 +24,13 @@
         
         #data
         "data/admin_data.xml",
+        "data/sequence.xml",
 
         #views
         "views/spa_order_views.xml",
         "views/spa_session_views.xml",
         "views/partner_views.xml",
+        "views/product_views.xml",
         "views/menu_views.xml",
         "views/company_views.xml",
         

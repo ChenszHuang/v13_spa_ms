@@ -4,7 +4,7 @@ from ..tools import const
 class ResPartner(models.Model):
     _inherit = "res.partner"
     
-    number = fields.Char(string="Therapist No.", readonly=True, tracking=True, copy=False)
+    number = fields.Char(string="Therapist No.", readonly=True, tracking=True, copy=False, index=True)
     nickname = fields.Char(string="Nickname")
     gender = fields.Selection(const.GENDER_SELECTION, string="Gender", tracking=True)
     birthday = fields.Date(string="Date of Birth", tracking=True)
@@ -30,3 +30,11 @@ class ResPartner(models.Model):
         if company.default_account_payable:
             res['property_account_payable_id'] = company.default_account_payable.id
         return res
+    
+    @api.model
+    def create(self, vals):
+        
+        if vals.get('is_therapist') and not vals.get('number'):
+            vals['number'] = self.env['ir.sequence'].next_by_code('res.partner.profile')
+
+        return super().create(vals)

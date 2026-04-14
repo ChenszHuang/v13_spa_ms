@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_spa_order_user,spa.order user,model_spa_order,base.group_user,1,1,1,1
-access_spa_session_user,spa.session user,model_spa_session,base.group_user,1,1,1,1
+access_spa_order_user,spa.order.user,model_spa_order,base.group_user,1,1,1,1
+access_spa_session_user,spa.session.user,model_spa_session,base.group_user,1,1,1,1
+access_treatment_type_user,treatment.type.user,model_treatment_type,base.group_user,1,1,1,1

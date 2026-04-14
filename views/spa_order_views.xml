@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
+
     <record id="view_spa_order_tree" model="ir.ui.view">
         <field name="name">spa.order.tree</field>
         <field name="model">spa.order</field>
@@ -18,28 +18,56 @@
         <field name="model">spa.order</field>
         <field name="arch" type="xml">
             <form string="Spa Order">
+                <header>
+                    <button name="action_waitlist" type="object" string="Set to Waitlist" class="btn btn-secondary" states="draft"/>
+                    <button name="action_confirm" type="object" string="Confirm" confirm="Are you sure to confirm this order?" class="btn btn-primary" states="draft,wait"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,wait,confirm,done"/>
+                </header>
                 <sheet>
-                    <group>
+                    <div class="oe_title">
+                        <label for="number"/>
+                        <h1>
+                            <field name="number" placeholder="Number" force_save="1"/>
+                        </h1>
+                    </div>
+
+                    <group col="4" colspan="2">
                         <field name="partner_id"/>
-                        <field name="state" readonly="1"/>
-                        <field name="invoice_id" readonly="1"/>
+                        <field name="date"/>
+                        <field name="reference"/>
                     </group>
 
                     <notebook>
                         <page string="Sessions">
+                            <label for="order_line_ids" string="Treatment Sessions"/>
                             <field name="order_line_ids">
                                 <tree editable="bottom">
                                     <field name="product_id"/>
-                                    <field name="therapist_id"/>
                                     <field name="start_time"/>
                                     <field name="end_time"/>
+                                    <field name="therapist_id"/>
                                     <field name="state"/>
+                                    <field name="unavailable_therapist_ids" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Invoicing">
+                            <label for="invoice_ids" string="Invoices"/>
+                            <field name="invoice_ids">
+                                <tree>
+                                    <field name="name"></field>
                                 </tree>
                             </field>
                         </page>
                     </notebook>
+                    <field name="display_name" invisible="1"/>
 
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>

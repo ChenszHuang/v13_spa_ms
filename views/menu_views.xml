@@ -48,5 +48,25 @@
             action="action_spa_therapist"
             sequence="5"/>
 
-<!-- Spa > Master Data > Treatments -->
+<!-- Spa > Master Data > Product -->
+    <menuitem id="menu_spa_products_subparent"
+            name="Product"
+            parent="menu_spa_master_data_parent"
+            sequence="10"/>
+
+<!-- Spa > Master Data > Product > Treatment Type -->
+    <menuitem id="menu_spa_treatment_type"
+            name="Treatment type"
+            parent="menu_spa_products_subparent"
+            action="action_treatment_type"
+            sequence="0"/>
+
+<!-- Spa > Master Data > Product > Treatments -->
+    <menuitem id="menu_spa_products"
+            name="Treatments"
+            parent="menu_spa_products_subparent"
+            action="action_product_treatment"
+            sequence="5"/>
+
+
 </odoo>

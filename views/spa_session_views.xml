@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
+
     <record id="view_spa_session_tree" model="ir.ui.view">
         <field name="name">spa.session.tree</field>
         <field name="model">spa.session</field>
@@ -33,6 +33,8 @@
                         <field name="start_time"/>
                         <field name="end_time"/>
                     </group>
+
+                    <field name="unavailable_therapist_ids" invisible="1"/>
                 </sheet>
             </form>
         </field>

@@ -11,6 +11,8 @@
                         <group string="Accounting">
                             <field name="default_account_receivable"/>
                             <field name="default_account_payable"/>
+                            <field name="default_property_account_income_id"/>
+                            <field name="default_property_account_expense_id"/>
                         </group>
                     </group>
                 </page>

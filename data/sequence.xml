@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_res_partner_profile" model="ir.sequence">
+        <field name="name">Partner Profile</field>
+        <field name="code">res.partner.profile</field>
+        <field name="prefix">PN/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="seq_spa_order" model="ir.sequence">
+        <field name="name">Spa Order</field>
+        <field name="code">spa.order</field>
+        <field name="prefix">SO/</field>
+        <field name="padding">4</field>
+    </record>
+    
+</odoo>
