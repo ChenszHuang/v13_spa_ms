@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from odoo.fields import Datetime
 from datetime import timedelta
 from odoo.exceptions import AccessError, UserError, ValidationError
 
@@ -9,6 +10,8 @@ class SpaSession(models.Model):
 
     spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
     product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True)
+    product_price = fields.Float(string="Price", related="product_id.list_price")
+    discount = fields.Float(string="Discount",tracking=True, copy=False)
     therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True)
     state = fields.Selection([
         ("draft", "Draft"),
@@ -43,10 +46,13 @@ class SpaSession(models.Model):
 
             conflict = self.env['spa.session'].search(domain, limit=1)
             if conflict:
+                start_time = Datetime.context_timestamp(self, conflict.start_time)
+                end_time_conflict = Datetime.context_timestamp(self, conflict.end_time)
+
                 raise ValidationError(
                     f"Therapist {record.therapist_id.name} sudah memiliki sesi pada "
-                    f"{conflict.start_time.strftime('%d/%m/%Y %H:%M')} - "
-                    f"{conflict.end_time.strftime('%H:%M')}. "
+                    f"{start_time.strftime('%d/%m/%Y %H:%M')} - "
+                    f"{end_time_conflict.strftime('%H:%M')}. "
                     f"Silakan pilih therapist lain atau ubah waktu."
                 )
 

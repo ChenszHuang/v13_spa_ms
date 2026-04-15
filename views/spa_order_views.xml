@@ -23,6 +23,7 @@
                 <header>
                     <button name="action_waitlist" type="object" string="Set to Waitlist" class="btn btn-secondary" states="draft"/>
                     <button name="action_confirm" type="object" string="Confirm" confirm="Are you sure to confirm this order?" class="btn btn-primary" states="draft,wait"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,wait,confirm"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,wait,confirm,done"/>
                 </header>
                 <sheet>
@@ -41,16 +42,24 @@
 
                     <notebook>
                         <page string="Sessions">
-                            <label for="spa_session_ids" string="Treatment Sessions"/>
-                            <field name="spa_session_ids">
-                                <tree editable="bottom">
-                                    <field name="product_id"/>
-                                    <field name="start_time"/>
-                                    <field name="end_time"/>
-                                    <field name="therapist_id" domain="[('is_therapist','=',True)]"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
+                            <group>
+                                <field name="treatment_count"/>
+                            </group>
+                            <group>
+                                <label for="spa_session_ids" string="Treatment Sessions"/>
+                                <newline/>
+                                <field name="spa_session_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id" context="{'tree_view_ref': 'v13_spa_ms.view_product_treatment_tree'}" width="23%"/>
+                                        <field name="product_price" width="10%"/>
+                                        <field name="start_time" width="15%"/>
+                                        <field name="end_time" width="15%"/>
+                                        <field name="discount" string="Disc%" width="12%"/>
+                                        <field name="therapist_id" domain="[('is_therapist','=',True)]" width="15%"/>
+                                        <field name="state" width="10%"/>
+                                    </tree>
+                                </field>
+                            </group>
                         </page>
 
                         <page string="Invoicing">
@@ -84,5 +93,8 @@
         <field name="name">Spa Orders</field>
         <field name="res_model">spa.order</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">
+            {}
+        </field>
     </record>
 </odoo>

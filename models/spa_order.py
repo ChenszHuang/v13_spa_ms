@@ -9,11 +9,11 @@ class SpaOrder(models.Model):
     _order = "id desc"
 
     number = fields.Char(string="Number", copy=False, readonly=True)
-    partner_id = fields.Many2one("res.partner", string="Customer", copy=False)
+    partner_id = fields.Many2one("res.partner", string="Customer", copy=False, required=True)
     date = fields.Date(string="Date", tracking=True, copy=False, default=fields.Date.context_today)
     spa_session_ids = fields.One2many("spa.session", "spa_order_id", string="Spa Sessions", copy=False)
     reference = fields.Char(string="Reference")
-    treatment_count = fields.Integer(string="Treatment Count", compute="_compute_treatment_count", store=True)
+    treatment_count = fields.Integer(string="Treatment Count", compute="_compute_treatment_count", store=False)
     
     state = fields.Selection([
         ("draft", "Draft"),
@@ -23,6 +23,7 @@ class SpaOrder(models.Model):
         ("cancel", "Cancelled"),
         ], string="Status", readonly=True, copy=False, index=True, tracking=True, default="draft")
     invoice_ids = fields.One2many("account.move", "spa_order_id", string="Invoice/Receipt")
+    
 
     #api model
 
@@ -32,7 +33,13 @@ class SpaOrder(models.Model):
             confirmed_sessions = record.spa_session_ids.filtered(lambda s: s.state in ['ongoing', 'done'])
             record.treatment_count = len(confirmed_sessions)
 
-    
+    @api.model
+    def default_get(self, fields):
+        res = super().default_get(fields)
+        partner = self.env.ref('v13_spa_ms.partner_kontan', raise_if_not_found=False)
+        if partner:
+            res['partner_id'] = partner.id
+        return res
 
     def name_get(self):
         result = []
@@ -72,6 +79,17 @@ class SpaOrder(models.Model):
             record.create_and_post_customer_invoice(date=date)
             
             record.write({"state":"confirm"})
+
+    def action_cancel(self):
+        for record in self:
+            if record.state not in ["draft", "wait", "confirm"]:
+                raise UserError("State is not in draft/waiting/Confirmed status, please refresh")
+            
+            for session in record.spa_session_ids:
+                session.write({
+                    "state": "cancel"
+                })
+            record.write({"state":"cancel"})
     
     
     def create_and_post_customer_invoice(self,date=None):
@@ -117,6 +135,7 @@ class SpaOrder(models.Model):
                     "price_unit":product.list_price,
                     "quantity": session.quantity if hasattr(session, "quantity") else 1,
                     "account_id": account.id,
+                    "discount":session.discount,
                 }
                 
                 invoice_lines.append((0, 0, invoice_line_vals))

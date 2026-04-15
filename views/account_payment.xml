@@ -7,18 +7,25 @@
         <field name="arch" type="xml">
             <form string="Payment">
                 <header>
-                    <button name="action_post" type="object" string="Validate" states="draft" class="btn-primary"/>
+                    <button name="post" type="object" string="Validate" states="draft" class="btn-primary"/>
                     <button name="action_cancel" type="object" string="Cancel" states="draft,posted"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,posted,reconciled,cancelled"/>
                 </header>
 
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Number"/>
+                        <h1>
+                            <field name="name" force_save="1"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
                             <field name="company_id" invisible="1"/>
                             <field name="has_invoices" invisible="1"/>
                             <field name="hide_payment_method" invisible="1"/>
                             <field name="show_partner_bank_account" invisible="1"/>
+
                             <field name="payment_type"/>
                             <field name="partner_type"/>
                             <field name="partner_id"/>
@@ -79,6 +86,10 @@
 
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>

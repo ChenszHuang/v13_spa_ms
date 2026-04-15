@@ -3,6 +3,7 @@ from odoo.exceptions import UserError
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
+   
 
     @api.depends('invoice_ids', 'payment_type', 'partner_type', 'partner_id')
     def _compute_destination_account_id(self):
@@ -46,15 +47,29 @@ class AccountPayment(models.Model):
             payment.destination_account_id = account.id if account else False
 
     def post(self):
-        result = super().post()
+        
         # Redirect ke record payment setelah post
-        if len(self) == 1:
-            return {
-                'type': 'ir.actions.act_window',
-                'res_model': 'account.payment',
-                'res_id': self.id,
-                'view_mode': 'form',
-                'target': 'current',
-                'views': [(self.env.ref('v13_spa_ms.view_account_payment_form_custom').id, 'form')],
-            }
-        return result
+        for payment in self:
+            if payment.payment_type == 'inbound' and payment.partner_type == 'customer':
+                    if not payment.name or payment.name == "/":
+                        payment.name = self.env['ir.sequence'].next_by_code('customer.payment') 
+                        
+            result = super().post()
+
+            for invoice in payment.invoice_ids:
+                if invoice.spa_order_id:
+                    if invoice.invoice_payment_state == "paid" and invoice.spa_order_id.state != "cancel":
+                        invoice.spa_order_id.write({
+                            "state": "done",
+                        })
+
+            if len(self) == 1:
+                return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'account.payment',
+                    'res_id': self.id,
+                    'view_mode': 'form',
+                    'target': 'current',
+                    'views': [(self.env.ref('v13_spa_ms.view_account_payment_form_custom').id, 'form')],
+                }
+            return result

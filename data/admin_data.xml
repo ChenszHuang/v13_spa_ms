@@ -3,4 +3,8 @@
         <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
         <field name="groups_id" eval="[(4, ref('v13_spa_ms.group_erp_manager'))]"/>
     </record>
+
+    <record id="partner_kontan" model="res.partner">
+        <field name="name">Kontan</field>
+    </record>
 </odoo>
