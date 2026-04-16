@@ -3,8 +3,26 @@ from odoo.exceptions import UserError
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
-   
+    invoice_ids_real = fields.Many2many('account.move', string="Invoices (Reconciled)", compute='_compute_invoice_ids_real', store=False)
 
+    def _compute_invoice_ids_real(self):
+        for payment in self:
+            invoices = self.env['account.move']
+
+            lines = payment.move_line_ids.filtered(
+                lambda l: l.account_id.user_type_id.type in ('receivable', 'payable')
+            )
+
+            matched_lines = lines.mapped('matched_debit_ids.debit_move_id') | \
+                            lines.mapped('matched_credit_ids.credit_move_id')
+
+            invoices = matched_lines.mapped('move_id').filtered(
+                lambda m: m.is_invoice(include_receipts=True)
+            )
+
+            payment.invoice_ids_real = invoices
+
+            
     @api.depends('invoice_ids', 'payment_type', 'partner_type', 'partner_id')
     def _compute_destination_account_id(self):
         for payment in self:
@@ -22,7 +40,7 @@ class AccountPayment(models.Model):
             if payment.payment_type == 'transfer':
                 transfer_acc = payment.company_id.transfer_account_id
                 if not transfer_acc:
-                    raise UserError(_('Please define a Transfer Account.'))
+                    raise UserError(('Please define a Transfer Account.'))
                 payment.destination_account_id = transfer_acc.id
                 continue
 

@@ -5,6 +5,7 @@ from odoo.exceptions import AccessError, UserError, ValidationError
 
 class SpaSession(models.Model):
     _name = "spa.session"
+    _inherit = ["mail.thread","mail.activity.mixin"]
     _description = "Spa Session"
     _order = "id desc"
 
@@ -16,12 +17,13 @@ class SpaSession(models.Model):
     state = fields.Selection([
         ("draft", "Draft"),
         ("wait", "Waiting"),
-        ("ongoing", "Ongoing"),
+        ("ongoing", "Started"),
         ("done", "Done"),
         ("cancel", "Cancelled"),
         ], string="Status", readonly=True, copy=False, index=True, default="draft")
     start_time = fields.Datetime(string="Start Time", default=fields.Datetime.now)
     end_time = fields.Datetime(string="End Time", compute="_compute_end_time", store=True, tracking=True, copy=False)
+    remarks = fields.Text(string="Remarks", copy=False)
 
 
     #api decorator
@@ -65,6 +67,14 @@ class SpaSession(models.Model):
                 )
             else:
                 record.end_time = False
+
+    def name_get(self):
+        result = []
+        for record in self:
+            name = f"{record.spa_order_id.number} - {record.therapist_id.name}"
+            result.append((record.id, name))
+
+        return result
 
     #button state
     def action_waitlist(self):

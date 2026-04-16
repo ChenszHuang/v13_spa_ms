@@ -6,12 +6,11 @@
         <field name="model">spa.session</field>
         <field name="arch" type="xml">
             <tree string="Spa Session">
-                <field name="id"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
                 <field name="spa_order_id"/>
                 <field name="product_id"/>
                 <field name="therapist_id"/>
-                <field name="start_time"/>
-                <field name="end_time"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -22,20 +21,42 @@
         <field name="model">spa.session</field>
         <field name="arch" type="xml">
             <form string="Spa Session">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,wait,ongoing,done"/>
+                </header>
                 <sheet>
-                    <group>
-                        <field name="spa_order_id"/>
-                        <field name="state" readonly="1"/>
-                        <field name="therapist_id" />
+                    <group col="4">
+                        <group colspan="2">
+                            <label for="datetime_begin" string="Start &amp; End Time" />
+                            <div class="o_row">
+                                <field name="start_time" nolabel="1" class="oe_inline" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow" />
+                                <field name="end_time" nolabel="1" class="oe_inline" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            </div>
+                        </group>
                     </group>
-
-                    <group>
-                        <field name="start_time"/>
-                        <field name="end_time"/>
+                    <group colspan="2">
+                        <group>
+                            <field name="therapist_id" />
+                            <field name="product_id"/>
+                        </group>
+                        <group>
+                            <field name="spa_order_id"/>
+                        </group>
                     </group>
-
+                    <notebook>
+                        <page string="Other Info">
+                            <label for="remarks"/>
+                            <field name="remarks"/>
+                        </page>
+                    </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
+
         </field>
     </record>
 
