@@ -11,6 +11,10 @@
 
     <menuitem id="menu_spa_accounting" name="Accounting" parent="menu_spa_root" sequence="10"/>
 
+    <menuitem id="menu_spa_report" name="Reporting" parent="menu_spa_root" sequence="15"/>
+
+    <!-- Child Menu -->
+
     <!-- Spa > Orders > Orders -->
     <menuitem id="menu_spa_order" name="Orders" parent="menu_spa_order_parent" action="action_spa_order" sequence="0"/>
 
@@ -20,8 +24,11 @@
     <!-- Spa > Master Data > Customers -->
     <menuitem id="menu_spa_customer" name="Customer" parent="menu_spa_master_data_parent" action="contacts.action_contacts" sequence="0"/>
 
+    <!-- Spa > Master Data > Guide -->
+    <menuitem id="menu_spa_guide" name="Guide" parent="menu_spa_master_data_parent" action="action_spa_guide" sequence="5"/>
+
     <!-- Spa > Master Data > Therapist -->
-    <menuitem id="menu_spa_therapist" name="Therapist" parent="menu_spa_master_data_parent" action="action_spa_therapist" sequence="5"/>
+    <menuitem id="menu_spa_therapist" name="Therapist" parent="menu_spa_master_data_parent" action="action_spa_therapist" sequence="10"/>
 
     <!-- Spa > Master Data > Product -->
     <menuitem id="menu_spa_products_subparent" name="Product" parent="menu_spa_master_data_parent" sequence="10"/>
@@ -37,5 +44,9 @@
 
     <!-- Spa > Accounting > Payments -->
     <menuitem id="menu_spa_payments" name="Payments" parent="menu_spa_accounting" action="action_spa_payment" sequence="5"/>
+
+    <!-- Spa > Reporting > Revenue Report -->
+    <menuitem id="menu_spa_revenue_report" name="Revenue Report" parent="menu_spa_report" action="action_print_revenue_report" sequence="0"/>
+
 
 </odoo>

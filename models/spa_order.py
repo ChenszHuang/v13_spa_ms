@@ -9,7 +9,8 @@ class SpaOrder(models.Model):
     _order = "id desc"
 
     number = fields.Char(string="Number", copy=False, readonly=True)
-    partner_id = fields.Many2one("res.partner", string="Customer", copy=False, required=True)
+    partner_id = fields.Many2one("res.partner", string="Customer", copy=False, required=True, tracking=True)
+    guide_id = fields.Many2one("res.partner", string="Guide", copy=False, tracking=True)
     date = fields.Date(string="Date", tracking=True, copy=False, default=fields.Date.context_today)
     spa_session_ids = fields.One2many("spa.session", "spa_order_id", string="Spa Sessions", copy=False)
     reference = fields.Char(string="Reference")

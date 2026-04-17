@@ -25,6 +25,12 @@
         #data
         "data/admin_data.xml",
         "data/sequence.xml",
+        "data/cron_data.xml",
+        "data/report_paperformat_data.xml",
+
+        #report
+        "reports/layout_report.xml",
+        "reports/revenue_report.xml",
 
         #views
         "views/spa_order_views.xml",
@@ -33,8 +39,13 @@
         "views/product_views.xml",
         "views/account_move.xml",
         "views/account_payment.xml",
+        "wizards/print_revenue_report.xml",
+
+
         "views/menu_views.xml",
         "views/company_views.xml",
+
+
         
     ],
 

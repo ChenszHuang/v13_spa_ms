@@ -30,6 +30,9 @@
                     </field>
                 </page>
             </xpath>
+            <xpath expr="//field[@name='invoice_user_id']" position="after">
+                <field name="spa_order_id"/>
+            </xpath>
         </field>
     </record>
 

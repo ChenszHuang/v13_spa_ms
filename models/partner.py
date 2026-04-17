@@ -15,7 +15,7 @@ class ResPartner(models.Model):
 		("divorced", "Divorced"),
 		], "Marital Status")
     is_therapist = fields.Boolean("Is Therapist", tracking=True, copy=False)
-    is_travel_agent = fields.Boolean("Is Travel Agent", tracking=True, copy=False)
+    is_guide = fields.Boolean("Is Guide", tracking=True, copy=False)
     join_date = fields.Date(string="Join Date", tracking=True, copy=False)
     therapist_code = fields.Char(string="Therapist ID", tracking=True, copy=False)
     

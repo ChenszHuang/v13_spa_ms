@@ -6,7 +6,7 @@ class AccountMove(models.Model):
     _inherit = "account.move"
     _order = "id desc"
 
-    spa_order_id = fields.Many2one("spa.order", string="Order", tracking=True, copy=False)
+    spa_order_id = fields.Many2one("spa.order", string="Order", tracking=True, copy=False, index=True)
     therapist_id = fields.Many2one("res.partner", string="Therapist", tracking=True, copy=False)
     payment_ids = fields.Many2many('account.payment', string="Payments", compute='_compute_payment_ids',store=False)
 
@@ -73,4 +73,4 @@ class AccountMove(models.Model):
                     })
                 info['title'] = type_payment
                 move.invoice_outstanding_credits_debits_widget = json.dumps(info)
-                move.invoice_has_outstanding = True    
+                move.invoice_has_outstanding = True

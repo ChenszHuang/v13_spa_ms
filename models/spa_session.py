@@ -9,21 +9,25 @@ class SpaSession(models.Model):
     _description = "Spa Session"
     _order = "id desc"
 
-    spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False)
-    product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True)
-    product_price = fields.Float(string="Price", related="product_id.list_price")
+    spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False, tracking=True)
+    product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True, tracking=True)
+    product_price = fields.Float(string="Price", readonly=True)
+    duration = fields.Integer(string="Duration", related="product_id.duration")
     discount = fields.Float(string="Discount",tracking=True, copy=False)
-    therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True)
+    total_amount = fields.Float(string="Total", compute="_compute_total_amount", store="True")
+    therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True, tracking=True)
     state = fields.Selection([
         ("draft", "Draft"),
         ("wait", "Waiting"),
         ("ongoing", "Started"),
         ("done", "Done"),
         ("cancel", "Cancelled"),
-        ], string="Status", readonly=True, copy=False, index=True, default="draft")
-    start_time = fields.Datetime(string="Start Time", default=fields.Datetime.now)
+        ], string="Status", readonly=True, copy=False, index=True, tracking=True, default="draft")
+    start_time = fields.Datetime(string="Start Time", default=fields.Datetime.now, tracking=True, required=True)
     end_time = fields.Datetime(string="End Time", compute="_compute_end_time", store=True, tracking=True, copy=False)
     remarks = fields.Text(string="Remarks", copy=False)
+
+    coupon = fields.Char(string="Coupon", copy=False, tracking=True)
 
 
     #api decorator
@@ -68,6 +72,19 @@ class SpaSession(models.Model):
             else:
                 record.end_time = False
 
+    @api.depends("product_price", "discount")
+    def _compute_total_amount(self):
+        for record in self:
+            price = record.product_price or 0.0
+            discount = record.discount or 0.0
+
+            record.total_amount = price * (1 - (discount / 100.0))
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        if self.product_id:
+            self.product_price = self.product_id.list_price
+
     def name_get(self):
         result = []
         for record in self:
@@ -83,3 +100,44 @@ class SpaSession(models.Model):
                 raise UserError("State is not in draft status, please refresh & try again")
                 
             record.write({'state':'wait'})
+
+    def action_start(self):
+        for record in self:
+            if record.state not in ['draft', 'wait']:
+                raise UserError("State is not in draft/waiting status, please refresh & try again")
+                
+            record.write({'state':'ongoing'})
+
+    def action_cancel(self):
+        for record in self:
+            record.write({'state':'cancel'})
+    
+    def action_draft(self):
+        for record in self:
+            if record.state not in ['cancel']:
+                raise UserError("State is not in cancel status, please refresh & try again")
+
+            record.write({'state':"draft"})
+    
+    def action_done(self):
+        for record in self:
+            if record.state not in ["ongoing"]:
+                raise UserError("State is not in started status, please refresh & try again")
+            
+            if record.end_time > fields.Datetime.now():
+                raise UserError("The session cannot be completed yet. Please wait until the end time.")
+            
+            record.write({"state": "done"})
+
+    def _cron_session_status(self):
+
+        now = fields.Datetime.now()
+
+        sessions = self.search([
+            ('state', 'in', ['ongoing']),
+            ('end_time', '<', now)
+        ])
+
+        sessions.write({
+            'state': 'done'
+        })
