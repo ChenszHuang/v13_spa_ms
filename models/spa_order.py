@@ -137,6 +137,7 @@ class SpaOrder(models.Model):
                     "quantity": session.quantity if hasattr(session, "quantity") else 1,
                     "account_id": account.id,
                     "discount":session.discount,
+                    "spa_session_id":session.id,
                 }
                 
                 invoice_lines.append((0, 0, invoice_line_vals))

@@ -74,3 +74,8 @@ class AccountMove(models.Model):
                 info['title'] = type_payment
                 move.invoice_outstanding_credits_debits_widget = json.dumps(info)
                 move.invoice_has_outstanding = True
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    spa_session_id = fields.Many2one("spa.session", string="Session", copy=False)

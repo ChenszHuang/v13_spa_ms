@@ -4,14 +4,149 @@
         <template id="revenue_report">
             <t t-call='web.html_container'>
                 <t t-call="web.internal_layout">
-                    <t t-set="report_title" t-value="'FAD4'" />
-                    <div class="page">
-                        <h5>Revenue Summary Report</h5>
-                    </div>
+                    <t t-set="report_title" t-value="'FAD'" />
+                    <table style="width: 100%; font-size: 11pt;" cellpadding="0" border="0"
+                        cellspacing="0">
+
+                        <thead>
+                            <tr>
+                                <td style="font-weight: bold; font-size: 14pt; text-align:left;"
+                                    colspan="3">
+                                    REVENUE REPORT BY TREATMENT
+                                </td>
+                                <td style="text-align:right; padding-right:15px;" colspan="3">
+                                    Period: <span
+                                        t-esc="date_from.strftime('%d/%m/%Y')" /> - <span
+                                        t-esc="date_to.strftime('%d/%m/%Y')" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="height: 20px;"></td>
+                            </tr>
+                            <tr style="margin-top: 20px;">
+                                <th
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; width:5%">
+                                    Code</th>
+
+                                <th
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; width:40%">
+                                    Treatment</th>
+                                <th
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:center; width:7%;">
+                                    Qty</th>
+                                <th
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right; width:16%; padding-right:7px;">
+                                    Gross</th>
+                                <th
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right;width:16%; padding-right:7px;">
+                                    Discount</th>
+                                <th
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right; width:16%; padding-right:7px;">
+                                    Net</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <t t-foreach="items" t-as="group">
+
+                                <!-- ROW: TREATMENT TYPE (group header) -->
+                                <tr style="background-color:#f0f0f0;">
+                                    <td style="font-weight:bold; padding:5px 4px;">
+                                        <t t-esc="group['type_code']" />
+                                    </td>
+                                    <td colspan="5" style="font-weight:bold; padding:5px 4px;">
+                                        <t t-esc="group['type_name']" />
+                                    </td>
+                                </tr>
+
+                                <!-- ROW: DETAIL PER TREATMENT -->
+                                <t t-foreach="group['treatments']" t-as="treatment">
+                                    <tr style="border-bottom: 0.5px solid #ddd;">
+                                        <td style="padding:4px 4px 4px 10px;">
+                                            <t t-esc="treatment['code']" />
+                                        </td>
+                                        <td style="padding:4px 4px 4px 10px;">
+                                            <t t-esc="treatment['name']" />
+                                        </td>
+                                        <td style="text-align:center; padding:4px;">
+                                            <t t-esc="treatment['qty']" />
+                                        </td>
+                                        <td style="text-align:right; padding:4px;">
+                                            <t t-esc="'{:,.0f}'.format(treatment['gross'])" />
+                                        </td>
+                                        <td style="text-align:right; padding:4px;">
+                                            <t
+                                                t-esc="'{:,.0f}'.format(treatment['discount_amount'])" />
+                                        </td>
+                                        <td style="text-align:right; padding:4px;">
+                                            <t t-esc="'{:,.0f}'.format(treatment['net'])" />
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- ROW: SUBTOTAL PER GROUP -->
+                                <tr style="border-top:1px solid #aaa; border-bottom:1px solid #aaa;">
+                                    <td style="font-weight:bold; padding:5px 4px 5px 4px;"
+                                        colspan="2">
+                                        Subtotal
+                                    </td>
+                                    <td
+                                        style="font-weight:bold; text-align:center; padding:5px 4px;">
+                                        <t t-esc="group['total_qty']" />
+                                    </td>
+                                    <td style="font-weight:bold; text-align:right; padding:5px 4px;">
+                                        <t t-esc="'{:,.0f}'.format(group['total_gross'])" />
+                                    </td>
+                                    <td style="font-weight:bold; text-align:right; padding:5px 4px;">
+                                        <t t-esc="'{:,.0f}'.format(group['total_discount'])" />
+                                    </td>
+                                    <td style="font-weight:bold; text-align:right; padding:5px 4px;">
+                                        <t t-esc="'{:,.0f}'.format(group['total_net'])" />
+                                    </td>
+                                </tr>
+
+                                <!-- SPASI ANTAR GROUP -->
+                                <tr>
+                                    <td colspan="5" style="padding:4px 0;"></td>
+                                </tr>
+
+                            </t>
+
+                            <!-- ROW: GRAND TOTAL -->
+                            <tr style="border-top:2px solid #000; background-color:#f0f0f0;">
+                                <td style="font-weight:bold; padding:6px 4px;" colspan="2">GRAND
+                                    TOTAL</td>
+                                <td style="font-weight:bold; text-align:center; padding:6px 4px;">
+                                    <t t-esc="grand_total['qty']" />
+                                </td>
+                                <td style="font-weight:bold; text-align:right; padding:6px 4px;">
+                                    <span t-esc="grand_total['gross']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_id.currency_id}" />
+                                </td>
+                                <td style="font-weight:bold; text-align:right; padding:6px 4px;">
+                                    <span t-esc="grand_total['discount']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_id.currency_id}" />
+                                </td>
+                                <td style="font-weight:bold; text-align:right; padding:6px 4px;">
+                                    <span t-esc="grand_total['net']"
+                                        t-options="{'widget': 'monetary', 'display_currency': company_id.currency_id}" />
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
                 </t>
             </t>
         </template>
 
-        <report id="action_revenue_report" model="print.revenue.report" string="Revenue Report" report_type="qweb-pdf" name="v13_spa_ms.revenue_report" file="v13_spa_ms.revenue_report" print_report_name="(object._get_report_base_filename())" menu="False" paperformat="v13_spa_ms.paperformat_internal_layout_customize" />
+        <report id="action_revenue_report"
+            model="print.revenue.report"
+            string="Revenue Report"
+            report_type="qweb-pdf"
+            name="v13_spa_ms.revenue_report"
+            file="v13_spa_ms.revenue_report"
+            print_report_name="(object._get_report_base_filename())" menu="False"
+            paperformat="v13_spa_ms.paperformat_internal_layout_customize" />
     </data>
 </odoo>

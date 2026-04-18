@@ -2,74 +2,74 @@
 <odoo>
 
     <template id="web.internal_layout">
-        <t t-if="not o" t-set="o" t-value="doc"/>
+        <t t-if="not o" t-set="o" t-value="doc" />
 
         <t t-if="not company">
             <!-- Multicompany -->
             <t t-if="company_id">
-                <t t-set="company" t-value="company_id"/>
+                <t t-set="company" t-value="company_id" />
             </t>
             <t t-elif="o and 'company_id' in o">
-                <t t-set="company" t-value="o.company_id.sudo()"/>
+                <t t-set="company" t-value="o.company_id.sudo()" />
             </t>
             <t t-else="else">
-                <t t-set="company" t-value="res_company"/>
+                <t t-set="company" t-value="res_company" />
             </t>
         </t>
 
         <div class="header">
             <table style="width:100%;" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td style="width: 70%; text-align: left; vertical-align: top;">
+                    <td style="width: 70%; text-align: left; vertical-align: top; padding-top:10px;">
                         <t>
-                            <h1 style="font-size: 24px; font-weight: 900; text-align: left;">
-                                CITY SPORT
-                            </h1>
+                            <img t-att-src="'/v13_spa_ms/static/image/city_sport_logo.png'"
+                                style="max-height: 50px;" />
                             <h2 style="margin: 0; font-size: inherit;">
                                 MASSAGE &amp; THERAPY
                             </h2>
-                            <p>
-                                Jalan Pembangunan, Komp. Pasar Penuin Lantai 2<br />
-                                Kel. Batu Selicin, Kec. Lubuk Baja, Kota Batam<br />
-                                Kepulauan Riau 29441
-                        </p>
-                    </t>
-                </td>
-                <td style="text-align: right; vertical-align: top;">
-                    <t t-if="report_title">
-                        <span style="font-size: 24px; font-weight: 700; text-align: Top;padding-right:8px;">
-                            <t t-esc="report_title" />
-                        </span>
-                    </t>
-                    <t t-if="report_title_raw">
-                        <t t-raw="report_title_raw"/>
-                    </t>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
-        <t t-raw="0"/>
-    </div>
+                            <p> Jalan Pembangunan, Komp. Pasar Penuin Lantai 2<br /> Kel. Batu
+                                Selicin, Kec. Lubuk Baja, Kota Batam<br /> Tel: +6283851333333 |
+                                Email: city.sport.penuin@gmail.com </p>
+                        </t>
+                    </td>
+                    <td style="text-align: right; vertical-align: top;  padding-top:20px;">
+                        <t t-if="report_title">
+                            <span
+                                style="font-size: 24px; font-weight: 700; text-align: bottom;padding-right:20px;">
+                                <t t-esc="report_title" />
+                            </span>
+                        </t>
+                        <t t-if="report_title_raw">
+                            <t t-raw="report_title_raw" />
+                        </t>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+            t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-raw="0" />
+        </div>
 
-    <div class="footer o_standard_footer" style="font-size: 14px; border-top: 1px solid #000000">
-        <table style="width:100%;" cellpadding="0" cellspacing="0">
-            <tr>
-                <td t-if="report_type == 'pdf'" style="width: auto; text-align: centre; vertical-align: top;">
-                    <div>
-                  Printed On: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M:%S')"/>
-                    </div>
-                    <div t-if="company.report_footer" name="financial_infos">
-                        <span t-field="company.report_footer"/>
-                    </div>
-                </td>
-                <td t-if="report_type == 'pdf'" style="width: 20%; text-align: right; vertical-align: top;">
-                Page: <span class="page"/>
- of <span class="topage"/>
-            </td>
-        </tr>
-    </table>
-</div>
-</template>
+        <div class="footer o_standard_footer" style="font-size: 14px; border-top: 1px solid #000000">
+            <table style="width:100%;" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td t-if="report_type == 'pdf'"
+                        style="width: auto; text-align: centre; vertical-align: top;">
+                        <div> Printed On: <span
+                                t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M:%S')" />
+                        </div>
+                        <div t-if="company.report_footer" name="financial_infos">
+                            <span t-field="company.report_footer" />
+                        </div>
+                    </td>
+                    <td t-if="report_type == 'pdf'"
+                        style="width: 20%; text-align: right; vertical-align: top;"> Page: <span
+                            class="page" /> of <span class="topage" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </template>
 
 </odoo>

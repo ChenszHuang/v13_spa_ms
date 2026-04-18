@@ -20,4 +20,7 @@ class RevenueReport(models.TransientModel):
         return self.env.ref('v13_spa_ms.action_revenue_report').report_action(self)
 
     def _get_report_base_filename(self):
-        return f'City Sport Revenue Report - {self.date_from}-{self.date_to}'
+        date_from = self.date_from.strftime('%d-%m-%Y')
+        date_to = self.date_to.strftime('%d-%m-%Y')
+
+        return f'City Sport Revenue Report ({date_from}-{date_to})'
