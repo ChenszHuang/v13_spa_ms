@@ -2,8 +2,13 @@
 <odoo>
     <record id="group_erp_manager" model="res.groups">
         <field name="name">ERP Manager</field>
-        <field name="category_id" ref="base.module_category_administration"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="category_id" ref="base.module_category_administration" />
+        <field name="implied_ids" eval="[(4, ref('base.group_system'))]" />
+    </record>
+
+    <record id="group_erp_admin" model="res.groups">
+        <field name="name">ERP Admin</field>
+        <field name="category_id" ref="base.module_category_administration" />
     </record>
 
 </odoo>

@@ -1,4 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_spa_order_user,spa.order.user,model_spa_order,base.group_user,1,1,1,1
-access_spa_session_user,spa.session.user,model_spa_session,base.group_user,1,1,1,1
-access_treatment_type_user,treatment.type.user,model_treatment_type,base.group_user,1,1,1,1
+access_spa_order_erp_manager,spa.order.erp.manager,model_spa_order,v13_spa_ms.group_erp_manager,1,1,1,1
+access_spa_order_erp_admin,spa.order.erp.admin,model_spa_order,v13_spa_ms.group_erp_admin,1,1,1,0
+access_spa_session_erp_manager,spa.session.erp.manager,model_spa_session,v13_spa_ms.group_erp_manager,1,1,1,1
+access_spa_session_erp_admin,spa.session.erp.admin,model_spa_session,v13_spa_ms.group_erp_admin,1,1,1,0
+access_treatment_type_erp_manager,treatment.type.erp.manager,model_treatment_type,v13_spa_ms.group_erp_manager,1,1,1,1
+access_treatment_type_erp_admin,treatment.type.erp.admin,model_treatment_type,v13_spa_ms.group_erp_admin,1,1,0,0
+access_product_template_erp_manager,product.template.erp.manager,model_product_template,v13_spa_ms.group_erp_manager,1,1,1,1
+access_product_template_erp_admin,product.template.erp.admin,model_product_template,v13_spa_ms.group_erp_admin,1,1,0,0
