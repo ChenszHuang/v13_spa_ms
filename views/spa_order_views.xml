@@ -6,12 +6,12 @@
         <field name="model">spa.order</field>
         <field name="arch" type="xml">
             <tree string="Spa Orders">
-                <field name="number"/>
-                <field name="date"/>
-                <field name="partner_id"/>
-                <field name="guide_id"/>
-                <field name="treatment_count" sum="Total Treatment"/>
-                <field name="state"/>
+                <field name="number" />
+                <field name="date" />
+                <field name="partner_id" />
+                <field name="guide_id" />
+                <field name="treatment_count" sum="Total Treatment" />
+                <field name="state" />
             </tree>
         </field>
     </record>
@@ -22,75 +22,84 @@
         <field name="arch" type="xml">
             <form string="Spa Order">
                 <header>
-                    <button name="action_waitlist" type="object" string="Set to Waitlist" class="btn btn-secondary" states="draft"/>
-                    <button name="action_confirm" type="object" string="Confirm" confirm="Are you sure to confirm this order?" class="btn btn-primary" states="draft,wait"/>
-                    <button name="action_cancel" type="object" string="Cancel" states="draft,wait,confirm"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,wait,confirm,done"/>
+                    <button name="action_waitlist" type="object" string="Set to Waitlist"
+                        class="btn btn-secondary" states="draft" />
+                    <button name="action_confirm" type="object" string="Confirm"
+                        confirm="Are you sure to confirm this order?" class="btn btn-primary"
+                        states="draft,wait" />
+                    <button name="action_cancel" type="object" string="Cancel"
+                        states="draft,wait,confirm" />
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,wait,confirm,done" />
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label for="number"/>
+                        <label for="number" />
                         <h1>
-                            <field name="number" placeholder="Number" force_save="1"/>
+                            <field name="number" placeholder="Number" force_save="1" />
                         </h1>
                     </div>
 
                     <group col="4" colspan="2">
-                        <group colspan ="2">
-                            <field name="partner_id"/>
-                            <field name="guide_id" domain="[('is_guide', '=', True)]" context="{'default_is_guide': True}"/>
-                            <field name="reference"/>
+                        <group colspan="2">
+                            <field name="partner_id" />
+                            <field name="guide_id" domain="[('is_guide', '=', True)]"
+                                context="{'default_is_guide': True}" />
+                            <field name="reference" />
                         </group>
-                        <group colspan ="2">
-                            <field name="date"/>
+                        <group colspan="2">
+                            <field name="date" />
                         </group>
                     </group>
 
                     <notebook>
                         <page string="Sessions">
                             <group>
-                                <field name="treatment_count"/>
+                                <field name="treatment_count" />
                             </group>
                             <group>
-                                <label for="spa_session_ids" string="Treatment Sessions"/>
-                                <newline/>
+                                <label for="spa_session_ids" string="Treatment Sessions" />
+                                <newline />
                                 <field name="spa_session_ids" nolabel="1">
                                     <tree editable="bottom">
-                                        <field name="product_id" context="{'tree_view_ref': 'v13_spa_ms.view_product_treatment_tree'}" width="23%"/>
-                                        <field name="start_time" width="15%"/>
-                                        <field name="end_time" width="15%"/>
-                                        <field name="therapist_id" domain="[('is_therapist','=',True)]" width="15%"/>
-                                        <field name="coupon"/>
-                                        <field name="product_price" width="10%" sum="Subtotal" force_save="1"/>
-                                        <field name="discount" string="Disc%" width="12%"/>
-                                        <field name="total_amount" sum="Grand Total"/>
-                                        <field name="state" width="10%"/>
+                                        <field name="product_id"
+                                            context="{'tree_view_ref': 'v13_spa_ms.view_product_treatment_tree'}"
+                                            width="23%" />
+                                        <field name="start_time" width="15%" />
+                                        <field name="end_time" width="15%" />
+                                        <field name="therapist_id"
+                                            domain="[('is_therapist','=',True)]" width="15%" />
+                                        <field name="product_price" width="10%" sum="Subtotal"
+                                            force_save="1" />
+                                        <field name="discount" string="Disc%" width="12%" />
+                                        <field name="total_amount" sum="Grand Total" />
+                                        <field name="state" width="10%" />
                                     </tree>
                                 </field>
                             </group>
                         </page>
 
                         <page string="Invoicing">
-                            <label for="invoice_ids" string="Invoices"/>
+                            <label for="invoice_ids" string="Invoices" />
                             <field name="invoice_ids">
                                 <tree>
-                                    <field name="name"/>
-                                    <field name="partner_id"/>
-                                    <field name="invoice_date_due"/>
-                                    <field name="amount_total"/>
-                                    <field name="amount_residual"/>
-                                    <field name="invoice_payment_state"/>
-                                    <field name="state"/>
+                                    <field name="name" />
+                                    <field name="partner_id" />
+                                    <field name="invoice_date_due" />
+                                    <field name="amount_total" />
+                                    <field name="amount_residual" />
+                                    <field name="invoice_payment_state" />
+                                    <field name="state" />
                                 </tree>
                             </field>
                         </page>
                     </notebook>
-                    <field name="display_name" invisible="1"/>
+                    <field name="display_name" invisible="1" />
 
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
                 </div>
             </form>
         </field>

@@ -27,8 +27,6 @@ class SpaSession(models.Model):
     end_time = fields.Datetime(string="End Time", compute="_compute_end_time", store=True, tracking=True, copy=False)
     remarks = fields.Text(string="Remarks", copy=False)
 
-    coupon = fields.Char(string="Coupon", copy=False, tracking=True)
-
 
     #api decorator
 
