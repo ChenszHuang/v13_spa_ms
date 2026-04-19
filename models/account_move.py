@@ -79,3 +79,14 @@ class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     spa_session_id = fields.Many2one("spa.session", string="Session", copy=False)
+
+
+    def _get_computed_account(self):
+        account = super()._get_computed_account()
+        if not account and self.product_id:
+            company = self.move_id.company_id
+            if self.move_id.is_sale_document(include_receipts=True):
+                account = company.default_property_account_income_id
+            elif self.move_id.is_purchase_document(include_receipts=True):
+                account = company.default_property_account_expense_id  # if you have this too
+        return account
