@@ -76,7 +76,7 @@
                                                 <span
                                                     t-esc="line.name or line.product_id.name or ''" />
                                                 <br />
-                                                <span style="color: #888888; font-size: 9pt;"> Qty: <t
+                                                <span style="color: #888888; font-size: 8pt;"> Qty: <t
                                                         t-esc="int(line.quantity)" /> | Price: <t
                                                         t-esc="int(line.price_unit)"
                                                         t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}" />
