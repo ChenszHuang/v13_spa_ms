@@ -91,3 +91,6 @@ class AccountPayment(models.Model):
                     'views': [(self.env.ref('v13_spa_ms.view_account_payment_form_custom').id, 'form')],
                 }
             return result
+        
+    def _get_report_base_filename(self):
+        return self.name.replace('/', '_')

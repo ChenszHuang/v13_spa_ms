@@ -27,9 +27,9 @@
                             <h2 style="margin: 0; font-size: inherit;">
                                 MASSAGE &amp; THERAPY
                             </h2>
-                            <p> Jalan Pembangunan, Komp. Pasar Penuin Lantai 2<br /> Kel. Batu
-                                Selicin, Kec. Lubuk Baja, Kota Batam<br /> Tel: +6283851333333 |
-                                Email: city.sport.penuin@gmail.com </p>
+                            <p> Jl Pembangunan, Hotel Penuin Lt 2<br /> Kel. Batu Selicin, Kec. Lubuk
+                                Baja, Kota Batam, 29441<br /> Tel: +628217068322 | Email:
+                                city.sport.penuin@gmail.com </p>
                         </t>
                     </td>
                     <td style="text-align: right; vertical-align: top;  padding-top:20px;">
@@ -69,6 +69,46 @@
                     </td>
                 </tr>
             </table>
+        </div>
+    </template>
+
+    <template id="internal_layout_compact">
+        <t t-if="not o" t-set="o" t-value="doc" />
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id" />
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()" />
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company" />
+            </t>
+        </t>
+
+        <div class="header">
+            <table style="width:100%;" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="width: 100%; text-align: left; vertical-align: top; padding-top:6px;">
+                        <t>
+                            <img t-att-src="'/v13_spa_ms/static/image/city_sport_logo.png'"
+                                style="max-height: 30px;" />
+                            <h2 style="margin: 0; font-size: 9pt;">
+                                MASSAGE &amp; THERAPY
+                            </h2>
+                            <p style="font-size:9pt;"> Jl Pembangunan, Hotel Penuin Lt 2, Kel. Batu
+                                Selicin, <br />Kec. Lubuk Baja, Kota Batam, 29441<br /> Tel:
+                                +628217068322 <br /> Email: city.sport.penuin@gmail.com </p>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+            t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-raw="0" />
         </div>
     </template>
 

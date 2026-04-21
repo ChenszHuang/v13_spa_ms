@@ -74,43 +74,29 @@ class RevenueReportAbstract(models.AbstractModel):
         query = """
             SELECT
                 tt.id AS type_id,
-                tt.code as type_code,
+                tt.code AS type_code,
                 tt.name AS type_name,
                 pt.id AS product_id,
-                pt.treatment_code as code,
+                pt.treatment_code AS code,
                 pt.name AS product_name,
-            COUNT(ss.id) AS qty,
-            SUM(aml.price_unit) AS gross,
-            AVG(ss.discount) AS discount_pct,
-            SUM(
-                (aml.price_unit* aml.quantity) * (ss.discount / 100.0)
-            ) AS discount_amount,
-            SUM(
-               (aml.price_unit * aml.quantity) - ((aml.price_unit * aml.quantity) * (ss.discount / 100.0))
-            ) AS net
+                COUNT(ss.id) AS qty,
+                SUM(ss.product_price) AS gross,
+                AVG(ss.discount) AS discount_pct,          -- ← AVG instead
+                SUM(ss.product_price * (ss.discount / 100.0)) AS discount_amount,
+                SUM(ss.product_price - (ss.product_price * (ss.discount / 100.0))) AS net
             FROM
                 spa_session ss
-                INNER JOIN spa_order so
-                    ON so.id = ss.spa_order_id
-                INNER JOIN account_move_line aml
-                    ON aml.spa_session_id = ss.id
-                INNER JOIN account_move am
-                    ON am.id = aml.move_id
-                INNER JOIN product_product pp
-                    ON pp.id = ss.product_id
-                INNER JOIN product_template pt
-                    ON pt.id = pp.product_tmpl_id
-                INNER JOIN treatment_type tt
-                    ON tt.id = pt.treatment_type_id
+                INNER JOIN spa_order so ON so.id = ss.spa_order_id
+                INNER JOIN product_product pp ON pp.id = ss.product_id
+                INNER JOIN product_template pt ON pt.id = pp.product_tmpl_id
+                INNER JOIN treatment_type tt ON tt.id = pt.treatment_type_id
             WHERE
                 so.date >= %(date_from)s
                 AND so.date <= %(date_to)s
                 AND so.state = 'done'
-                AND am.state = 'posted'
-                AND am.type IN ('out_invoice', 'out_receipt')
             GROUP BY
                 tt.id, tt.code, tt.name,
-                pt.id, pt.treatment_code, pt.name
+                pt.id, pt.treatment_code, pt.name  -- ← no ss.discount
             ORDER BY
                 tt.id, pt.name
         """

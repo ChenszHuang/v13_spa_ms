@@ -31,6 +31,7 @@
         #report
         "reports/layout_report.xml",
         "reports/revenue_report.xml",
+        "reports/receipt_report.xml",
 
         #views
         "views/spa_order_views.xml",

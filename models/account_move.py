@@ -9,6 +9,7 @@ class AccountMove(models.Model):
     spa_order_id = fields.Many2one("spa.order", string="Order", tracking=True, copy=False, index=True)
     therapist_id = fields.Many2one("res.partner", string="Therapist", tracking=True, copy=False)
     payment_ids = fields.Many2many('account.payment', string="Payments", compute='_compute_payment_ids',store=False)
+    guide_id = fields.Many2one('res.partner', string="Guide", tracking=True, copy=False)
 
     def _compute_payment_ids(self):
         for move in self:
@@ -77,8 +78,6 @@ class AccountMove(models.Model):
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
-
-    spa_session_id = fields.Many2one("spa.session", string="Session", copy=False)
 
 
     def _get_computed_account(self):

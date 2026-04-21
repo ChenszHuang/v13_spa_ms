@@ -110,6 +110,7 @@ class SpaOrder(models.Model):
             "journal_id":journal.id,
             "invoice_line_ids": lines,
             "spa_order_id":self.id,
+            "guide_id":self.guide_id.id,
         }
 
         invoice = AccountMove.create(values)
@@ -120,27 +121,34 @@ class SpaOrder(models.Model):
         invoice_lines = []
 
         for record in self:
+            groups = {}
             for session in record.spa_session_ids:
                 if not session.product_id:
                     continue
             
                 product = session.product_id
-                account = (product.property_account_income_id or product.categ_id.property_account_income_categ_id)
+                price = product.list_price
+                discount = session.discount or 0.0
+                key = (product.id, price, discount)
                 
-                if not account:
-                    raise UserError("Product has no income account.")
+                if key not in groups:
+                    account = (product.property_account_income_id or product.categ_id.property_account_income_categ_id)
                 
-                invoice_line_vals = {
-                    "product_id": product.id,
-                    "name": product.name,
-                    "price_unit":product.list_price,
-                    "quantity": session.quantity if hasattr(session, "quantity") else 1,
-                    "account_id": account.id,
-                    "discount":session.discount,
-                    "spa_session_id":session.id,
-                }
+                    if not account:
+                        raise UserError("Product has no income account.")
                 
-                invoice_lines.append((0, 0, invoice_line_vals))
+                    groups[key] = {
+                        'product_id': product.id,
+                        'name': product.name,
+                        'price_unit': price,
+                        'quantity': 0,
+                        'account_id': account.id,
+                        'discount': discount,
+                    }
+                groups[key]['quantity'] += 1
+
+            for line_vals in groups.values():
+                invoice_lines.append((0, 0, line_vals))
 
         return invoice_lines
     
