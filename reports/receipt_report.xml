@@ -82,7 +82,7 @@
                                                         t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}" />
                                                 <t
                                                         t-if="line.discount > 0"> | Disc: <t
-                                                            t-esc="line.discount" />%</t></span>
+                                                            t-esc="'%g' % line.discount" />%</t></span>
                                             </td>
                                             <td class="cell_value">
                                                 <span t-esc="line.price_subtotal"
