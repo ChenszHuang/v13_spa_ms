@@ -14,7 +14,7 @@ class SpaOrder(models.Model):
     date = fields.Date(string="Date", tracking=True, copy=False, default=fields.Date.context_today)
     spa_session_ids = fields.One2many("spa.session", "spa_order_id", string="Spa Sessions", copy=False)
     reference = fields.Char(string="Reference")
-    treatment_count = fields.Integer(string="Treatment Count", compute="_compute_treatment_count", store=False)
+    treatment_count = fields.Integer(string="Treatment Count", compute="_compute_treatment_count", store=True)
     
     state = fields.Selection([
         ("draft", "Draft"),

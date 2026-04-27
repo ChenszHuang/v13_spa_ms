@@ -32,14 +32,14 @@
                                     style="border-bottom: 1px solid #000; border-top: 1px solid #000; width:40%">
                                     Treatment</th>
                                 <th
-                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:center; width:7%;">
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:center; width:3%;">
                                     Qty</th>
                                 <th
-                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right; width:16%; padding-right:7px;">
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right; width:18%; padding-right:7px;">
                                     Gross</th>
                                 <th
-                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right;width:16%; padding-right:7px;">
-                                    Discount</th>
+                                    style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right;width:18%; padding-right:7px;">
+                                    Discount%</th>
                                 <th
                                     style="border-bottom: 1px solid #000; border-top: 1px solid #000; text-align:right; width:16%; padding-right:7px;">
                                     Net</th>
@@ -76,7 +76,7 @@
                                         </td>
                                         <td style="text-align:right; padding:4px;">
                                             <t
-                                                t-esc="'{:,.0f}'.format(treatment['discount_amount'])" />
+                                                t-esc="'{:.0f}% | {:,.0f}'.format(treatment['discount_pct'], treatment['discount_amount'])" />
                                         </td>
                                         <td style="text-align:right; padding:4px;">
                                             <t t-esc="'{:,.0f}'.format(treatment['net'])" />

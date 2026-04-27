@@ -79,6 +79,7 @@ class RevenueReportAbstract(models.AbstractModel):
                 pt.id AS product_id,
                 pt.treatment_code AS code,
                 pt.name AS product_name,
+                ss.discount AS discount_pct,
                 COUNT(ss.id) AS qty,
                 SUM(ss.product_price) AS gross,
                 AVG(ss.discount) AS discount_pct,          -- ← AVG instead
@@ -96,9 +97,11 @@ class RevenueReportAbstract(models.AbstractModel):
                 AND so.state = 'done'
             GROUP BY
                 tt.id, tt.code, tt.name,
-                pt.id, pt.treatment_code, pt.name  -- ← no ss.discount
+                pt.id, pt.treatment_code, pt.name,
+                ss.discount
             ORDER BY
-                tt.id, pt.name
+                tt.id, pt.name, ss.discount
+                
         """
         self.env.cr.execute(query, {
             'date_from': date_from,
