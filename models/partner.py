@@ -18,6 +18,7 @@ class ResPartner(models.Model):
     is_guide = fields.Boolean("Is Guide", tracking=True, copy=False)
     join_date = fields.Date(string="Join Date", tracking=True, copy=False)
     therapist_code = fields.Char(string="Therapist ID", tracking=True, copy=False)
+    therapist_type = fields.Selection([('full_time', "Full Time"),('freelance', "Freelance")], string="Type" )
     
     
     @api.model
