@@ -32,6 +32,7 @@
         "reports/layout_report.xml",
         "reports/revenue_report.xml",
         "reports/receipt_report.xml",
+        "reports/therapist_activity_report.xml",
 
         #views
         "views/spa_order_views.xml",
@@ -41,6 +42,7 @@
         "views/account_move.xml",
         "views/account_payment.xml",
         "wizards/print_revenue_report.xml",
+        "wizards/print_therapist_activity_report.xml",
 
 
         "views/menu_views.xml",

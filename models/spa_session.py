@@ -82,6 +82,7 @@ class SpaSession(models.Model):
     def _onchange_product_id(self):
         if self.product_id:
             self.product_price = self.product_id.list_price
+            self.duration = self.product_id.duration
 
     def name_get(self):
         result = []

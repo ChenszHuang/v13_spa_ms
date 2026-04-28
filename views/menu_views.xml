@@ -76,5 +76,9 @@
     <menuitem id="menu_spa_revenue_report" name="Revenue Report" parent="menu_spa_report"
         action="action_print_revenue_report" sequence="0" />
 
+    <!-- Spa > Reporting > Therapist Activity Report -->
+    <menuitem id="menu_spa_therapist_activity_report" name="Therapist Activity Report"
+        parent="menu_spa_report"
+        action="action_print_therapist_activity_report" sequence="5" />
 
 </odoo>

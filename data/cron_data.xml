@@ -2,13 +2,13 @@
 <odoo>
     <data>
         <record id="ir_cron_session_update" model="ir.cron">
-                <field name="name">Session: Auto update session</field>
-                <field name="interval_number">15</field>
-                <field name="interval_type">minutes</field>
-                <field name="numbercall">-1</field>
-                <field name="model_id" ref="model_spa_session"/>
-                <field name="code">model._cron_session_status()</field>
-                <field name="state">code</field>
-            </record>
+            <field name="name">Session: Auto update session</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="model_id" ref="model_spa_session" />
+            <field name="code">model._cron_session_status()</field>
+            <field name="state">code</field>
+        </record>
     </data>
 </odoo>

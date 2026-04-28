@@ -11,7 +11,7 @@ class RevenueReportAbstract(models.AbstractModel):
         date_from = docs.date_from
         date_to = docs.date_to
         result = self._get_report_data(date_from, date_to)
-        items = self.mapping_revenue_report(result)
+        items = self.mapping_report(result)
 
         if not items:
             raise models.UserError("No data found for this report.")
@@ -35,7 +35,7 @@ class RevenueReportAbstract(models.AbstractModel):
         }
 
 
-    def mapping_revenue_report(self, result):
+    def mapping_report(self, result):
         groups = {}
 
         for row in result:

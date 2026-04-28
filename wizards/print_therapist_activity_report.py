@@ -2,9 +2,9 @@ from odoo import models, fields, api
 from dateutil.relativedelta import relativedelta
 
 
-class RevenueReport(models.TransientModel):
-    _name = "print.revenue.report"
-    _description = "Print Revenue Report"
+class ActivityReport(models.TransientModel):
+    _name = "print.therapist.activity.report"
+    _description = "Print Therapist Activity Report"
 
     date_from = fields.Date(string="Start Date", required=True)
     date_to = fields.Date(string="End Date", required=True)
@@ -16,10 +16,10 @@ class RevenueReport(models.TransientModel):
 
     
     def action_print(self):
-        return self.env.ref('v13_spa_ms.action_revenue_report').report_action(self)
+        return self.env.ref('v13_spa_ms.action_therapist_activity_report').report_action(self)
 
     def _get_report_base_filename(self):
         date_from = self.date_from.strftime('%d-%m-%Y')
         date_to = self.date_to.strftime('%d-%m-%Y')
 
-        return f'City Sport Revenue Report ({date_from}-{date_to})'
+        return f'City Sport Therapist Activity Report ({date_from}-{date_to})'

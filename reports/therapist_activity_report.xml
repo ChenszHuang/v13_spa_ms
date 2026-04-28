@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="therapist_activity_report">
+            <t t-call="web.html_container">
+                <t t-call="web.internal_layout">
+                    <t t-set="report_title" t-value="'MAD'" />
+                    <table style="width:100%; font-size:11pt;" cellpadding="0" border="0"
+                        cellspacing="0">
+
+                        <thead>
+                            <tr>
+                                <td style="font-weight:bold; font-size:14pt;" colspan="4">
+                                    THERAPIST ACTIVITY REPORT
+                                </td>
+                                <td style="text-align:right;" colspan="3"> Period: <span
+                                        t-esc="date_from.strftime('%d/%m/%Y')" /> - <span
+                                        t-esc="date_to.strftime('%d/%m/%Y')" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" style="height:16px;"></td>
+                            </tr>
+                            <tr>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; width:18%;">
+                                    Therapist</th>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; width:10%;">
+                                    Type</th>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; width:15%;">
+                                    Date</th>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; width:30%;">
+                                    Treatment</th>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; text-align:center; width:12%;">Dur
+                                    (m)</th>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; text-align:center; width:10%;">
+                                    Qty</th>
+                                <th
+                                    style="border-top:1px solid #000; border-bottom:1px solid #000; text-align:right; width:10%; padding-right:6px;">
+                                    Hours</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <t t-foreach="items" t-as="therapist">
+                                <t t-foreach="therapist['dates']" t-as="day">
+                                    <t t-foreach="day['products']" t-as="product">
+                                        <tr style="border-bottom:0.5px solid #ddd;">
+
+                                            <!-- Therapist: hanya tampil di baris pertama -->
+                                            <t t-if="day_index == 0 and product_index == 0">
+                                                <td
+                                                    style="padding:4px 6px; font-weight:bold; vertical-align:top;"
+                                                    t-att-rowspan="therapist['_row_count']">
+                                                    <t t-esc="therapist['therapist_name']" />
+                                                </td>
+                                                <td style="padding:4px 0px; vertical-align:top;"
+                                                    t-att-rowspan="therapist['_row_count']">
+                                                    <t t-esc="therapist['therapist_type']" />
+                                                </td>
+                                            </t>
+
+                                            <!-- Date: hanya tampil di baris pertama per tanggal -->
+                                            <t t-if="product_index == 0">
+                                                <td
+                                                    style="padding:4px 0px; vertical-align:top; color:#555;"
+                                                    t-att-rowspan="len(day['products'])">
+                                                    <t
+                                                        t-esc="day['session_date'].strftime('%d/%m/%Y')" />
+                                                </td>
+                                            </t>
+
+                                            <td style="padding:4px 0px;">
+                                                <t t-esc="product['product_name']" />
+                                            </td>
+                                            <td style="text-align:center; padding:4px 6px;">
+                                                <t t-esc="product['duration']" />
+                                            </td>
+                                            <td style="text-align:center; padding:4px 6px;">
+                                                <t t-esc="product['qty']" />
+                                            </td>
+                                            <td style="text-align:right; padding:4px 6px;">
+                                                <t t-esc="'%.2f' % product['total_hours']" />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+
+                                <!-- Subtotal per therapist -->
+                                <tr
+                                    style="border-top:1px solid #aaa; border-bottom:1px solid #aaa; background-color:#f0f0f0;">
+                                    <td colspan="5"
+                                        style="padding:5px 6px; font-weight:bold; font-size:11pt;">
+                                        Subotal </td>
+                                    <td
+                                        style="text-align:center; padding:5px 6px; font-weight:bold;">
+                                        <t t-esc="therapist['total_qty']" />
+                                    </td>
+                                    <td style="text-align:right; padding:5px 6px; font-weight:bold;">
+                                        <t t-esc="'%.2f' % therapist['total_hours']" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" style="padding:4px 0;"></td>
+                                </tr>
+                            </t>
+
+                            <!-- Grand Total -->
+                            <tr style="border-top:2px solid #000; background-color:#f0f0f0;">
+                                <td colspan="5" style="padding:6px; font-weight:bold;">GRAND TOTAL</td>
+                                <td style="text-align:center; padding:6px; font-weight:bold;">
+                                    <t t-esc="sum(t['total_qty'] for t in items)" />
+                                </td>
+                                <td style="text-align:right; padding:6px; font-weight:bold;">
+                                    <t t-esc="'%.2f' % sum(t['total_hours'] for t in items)" />
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </t>
+            </t>
+        </template>
+
+        <report id="action_therapist_activity_report"
+            model="print.therapist.activity.report"
+            string="Therapist Activity Report"
+            report_type="qweb-pdf"
+            name="v13_spa_ms.therapist_activity_report"
+            file="v13_spa_ms.therapist_activity_report"
+            print_report_name="(object._get_report_base_filename())" menu="False"
+            paperformat="v13_spa_ms.paperformat_internal_layout_customize" />
+    </data>
+</odoo>
