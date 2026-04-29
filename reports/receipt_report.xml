@@ -27,6 +27,7 @@
                             </td>
                         </tr>
                         <tr>
+                            <t t-set="inv" t-value="o.invoice_ids and o.invoice_ids[0]" />
                             <td style="width: 32%; font-weight: bold; ">
                                 <span>Date&amp;nbsp; </span>
                             </td>
@@ -48,6 +49,29 @@
                                 <span t-field="o.partner_id" />
                             </td>
                         </tr>
+                        <tr>
+                            <td style="width: 32%; font-weight: bold;">
+                                <span>Guide&amp;nbsp; </span>
+                            </td>
+                            <td style="width: 2%; font-weight: bold;">
+                                <span>:</span>
+                            </td>
+                            <td style="width: 66%;">
+                                <span t-field="inv.guide_id" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 32%; font-weight: bold;">
+                                <span>Ref&amp;nbsp; </span>
+                            </td>
+                            <td style="width: 2%; font-weight: bold;">
+                                <span>:</span>
+                            </td>
+                            <td style="width: 66%;">
+                                <span t-field="inv.ref" />
+                            </td>
+                        </tr>
+
 
                     </table>
                     <table style="width: 100%; margin-top:5px;">
@@ -76,7 +100,7 @@
                                                 <span
                                                     t-esc="line.name or line.product_id.name or ''" />
                                                 <br />
-                                                <span style="color: #888888; font-size: 8pt;"> Qty: <t
+                                                <span style="color: #000000; font-size: 8pt;"> Qty: <t
                                                         t-esc="int(line.quantity)" /> | Price: <t
                                                         t-esc="int(line.price_unit)"
                                                         t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}" />

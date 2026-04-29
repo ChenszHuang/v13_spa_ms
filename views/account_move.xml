@@ -4,10 +4,10 @@
     <record id="view_invoice_tree_inherit" model="ir.ui.view">
         <field name="name">account.move.tree.inherit</field>
         <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="inherit_id" ref="account.view_invoice_tree" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='amount_residual_signed']" position="after">
-                <field name="invoice_payment_state"/>
+                <field name="invoice_payment_state" />
             </xpath>
         </field>
     </record>
@@ -15,23 +15,26 @@
     <record id="view_invoice_form_inherit" model="ir.ui.view">
         <field name="name">account.move.form.inherit</field>
         <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
             <xpath expr="//page[@id='aml_tab']" position="after">
                 <page id="payment_tab" string="Payments">
                     <field name="payment_ids">
                         <tree>
-                            <field name="payment_date"/>
-                            <field name="name"/>
-                            <field name="partner_id"/>
-                            <field name="amount"/>
-                            <field name="state"/>
+                            <field name="payment_date" />
+                            <field name="name" />
+                            <field name="partner_id" />
+                            <field name="amount" />
+                            <field name="state" />
                         </tree>
                     </field>
                 </page>
             </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="guide_id" attrs="{'invisible':[('guide_id', '=', False)]}" />
+            </xpath>
             <xpath expr="//field[@name='invoice_user_id']" position="after">
-                <field name="spa_order_id"/>
+                <field name="spa_order_id" />
             </xpath>
         </field>
     </record>

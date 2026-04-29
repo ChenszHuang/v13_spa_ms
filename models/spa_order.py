@@ -140,6 +140,7 @@ class SpaOrder(models.Model):
             "invoice_line_ids": lines,
             "spa_order_id":self.id,
             "guide_id":self.guide_id.id,
+            "ref":self.reference,
         }
 
         invoice = AccountMove.create(values)
@@ -160,6 +161,7 @@ class SpaOrder(models.Model):
             "invoice_line_ids": [(5, 0, 0)] + lines,
             "spa_order_id": self.id,
             "guide_id": self.guide_id.id,
+            "ref":self.reference,
         })
         invoice._recompute_dynamic_lines()
 
