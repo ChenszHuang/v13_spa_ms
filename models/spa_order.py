@@ -77,21 +77,50 @@ class SpaOrder(models.Model):
                 session.write({
                     "state": "ongoing"
                 })
-            record.create_and_post_customer_invoice(date=date)
+            if not record.invoice_ids:
+                record.create_and_post_customer_invoice(date=date)
+            else:
+                record.update_existing_invoice(invoice=record.invoice_ids[0], date=date)
             
             record.write({"state":"confirm"})
 
     def action_cancel(self):
         for record in self:
-            if record.state not in ["draft", "wait", "confirm"]:
-                raise UserError("State is not in draft/waiting/Confirmed status, please refresh")
+            if record.state not in ["draft", "wait", "confirm","done"]:
+                raise UserError("State is updated, please refresh")
             
             for session in record.spa_session_ids:
                 session.write({
                     "state": "cancel"
                 })
+            record.cancel_existing_payment()
             record.write({"state":"cancel"})
-    
+            
+            
+    def action_draft(self):
+        for record in self:
+            if record.state not in ["cancel"]:
+                raise UserError("State is updated, please refresh")
+            
+            for session in record.spa_session_ids:
+                session.write({
+                    "state": "draft"
+                })
+            for invoice in record.invoice_ids:
+                invoice.write({
+                    "state":"draft"
+                })
+            record.write({"state":"draft"})
+            
+    def cancel_existing_payment(self):
+        for record in self:
+            for invoice in record.invoice_ids:
+                if invoice.invoice_payment_state == 'paid':
+                    for payment in invoice.payment_ids:
+                        payment.cancel()
+                    lines = invoice.line_ids.filtered(lambda l: l.account_id.reconcile)
+                    if lines:
+                        lines.remove_move_reconcile()
     
     def create_and_post_customer_invoice(self,date=None):
         ctx = self._context
@@ -116,6 +145,23 @@ class SpaOrder(models.Model):
         invoice = AccountMove.create(values)
         invoice.action_post() 
         return invoice
+
+    def update_existing_invoice(self, invoice=None, date=None):
+        company = self.env.company
+        partner = self.partner_id
+        journal = company.default_invoice_journal_id
+        lines = self.get_invoice_lines()
+        
+        invoice.write({
+            "invoice_date": date or fields.Date.context_today(self),
+            "partner_id": partner.id,
+            "invoice_payment_term_id": company.default_invoice_payment_term_id.id,
+            "journal_id": journal.id,
+            "invoice_line_ids": [(5, 0, 0)] + lines,
+            "spa_order_id": self.id,
+            "guide_id": self.guide_id.id,
+        })
+        invoice._recompute_dynamic_lines()
 
     def get_invoice_lines(self):
         invoice_lines = []
