@@ -13,3 +13,5 @@ class ResCompany(models.Model):
 
     #Journals
     default_invoice_journal_id = fields.Many2one("account.journal", string="Default Invoice Journal")
+    bank_account_no = fields.Text(string="Bank Account No")
+    

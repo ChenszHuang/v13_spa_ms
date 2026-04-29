@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="account.report_invoice_document">
+            <t t-set="o" t-value="o.with_context(lang=lang)" />
+            <t t-if="o.type == 'out_invoice'" t-set="report_title" t-value="'INVOICE'" />
+            <t t-call="web.internal_layout">
+                <div class="page" style="font-size:11pt">
+                    <table style="width:100%; margin-bottom:10px;" cellpadding="0" cellspacing="0" >
+                        <tr>
+                            <td style="width: 55% ;text-align: left; ">
+                                <table style="width:80%;">
+                                    <t t-set="partner" t-value="o.partner_id"/>
+                                    <t t-set="guide" t-value="o.guide_id or ''"/>
+        
+                                        <tr>
+                                            <td style="width:14%; text-align:left; padding:2px;">Customer</td>
+                                            <td style="width:1%; text-align:center;padding-left:7px;">:</td>
+                                            <td style="text-align:left; padding:2px;">
+                                                <span t-esc="partner and partner.with_context(show_address=True)._get_name() or ''" 
+                                                    t-options="{'widget': 'text'}"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr><td colspan="3" style="height: 10px;"></td></tr>
+                                        
+                                        <t t-if="guide">
+                                            <tr>
+                                                <td style="text-align:left; padding:2px;">Guide</td>
+                                                <td style="text-align:center; padding-left:7px;">:</td>
+                                                <td style="text-align:left; padding:2px;">
+                                                    <span t-esc="guide.name or ''"/><br/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                </table>
+                            </td>
+
+                            <td style="width: 45%; text-align: right; vertical-align: top; ">
+                                <table style="width:100%; margin:0px; padding:0px;">
+                                    <tr>
+                                        <td style="width:15%"/>
+                                        <t t-if="o.type == 'out_invoice'">
+                                            <td style="width:15%; text-align:left; padding:2px;">Invoice No</td>
+                                        </t>
+                                        <td style="width:3%; text-align:center;">:</td>
+                                        <td style="width:12%; text-align:left; padding:2px;">
+                                            <span t-if="o.name != '/'" t-field="o.name"/>
+                                            <span t-if="not o.name">-</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td/>
+                                        <td style="text-align:left; padding:2px;">Date</td>
+                                        <td style="text-align:center;">:</td>
+                                        <td style="text-align:left; padding:2px;">
+                                            <span t-if="o.invoice_date" t-field="o.invoice_date" 
+                                                t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                            <span t-if="not o.invoice_date">-</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+
+                    <table style="width:100%;">
+                        <thead>
+                            <tr style="border-top: 1px solid black; border-bottom: 1px solid black; color: black;">
+                                <th width="40%" style="padding:5px;">Description</th>
+                                <th width="8%" style="padding:5px; text-align: center;">Quantity</th>
+                                <th width="15%" style="padding:5px; text-align: right;">Price</th>
+                                <th width="14%" style="padding:5px; text-align: center;">Disc.%</th>
+                                <th width="20%" style="padding:5px; text-align: right;">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <t t-set="subtotal" t-value="0"/>
+
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                <tr >
+                                    <td style="padding:5px;"><span t-field="line.product_id"/></td>
+                                    <td style="padding:5px; text-align: center;"><span t-esc="'%g'%line.quantity"/></td>
+                                    <td style="padding:5px; text-align: right;"><span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    <td style="padding:5px; text-align: center;"><span t-field="line.discount"/></td>
+                                    <td style="padding:5px; text-align: right;"><span t-field="line.price_subtotal"/></td>
+                                </tr>
+                            </t>
+                            <tr style="border-top: 1px solid black">
+                                <td style="padding:5px;" rowspan="2" colspan="3"/>
+                                <td style="padding:5px;"><strong>Total Amount</strong></td>
+                                <td style="padding:5px; text-align: right;"><strong><span t-field="o.amount_untaxed"/></strong></td>
+                            </tr>
+                            <tr id="amount_total">
+                                <td style="padding:5px;"><strong>Grand Total</strong></td>
+                                <td style="padding:5px; text-align: right;"><strong><span t-field="o.amount_total"/></strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table style="width:100%;">
+                        <t t-if="o.type == 'out_invoice'">
+                            <tr>
+                                <td style="padding:5px;">
+                                    <strong>Bank Account No:</strong><br/>
+                                    <span t-field="o.company_id.bank_account_no"> </span> 
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td style="width:60%; padding:5px;">
+                                <strong>Remarks:</strong><br/>
+                                <span t-field="o.ref"/>
+                                <t t-if="not o.ref">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </t>
+                            </td>
+                        </tr>
+                    </table>
+                    <p>
+                        No signature is required as this is a computer generated document.
+                    </p>
+                    <div style="display:none">
+                        <!--dummy in case this report is inherited in other module, should not change current invoice format-->
+                        <div id="total">
+                        </div>
+                        <address></address>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="account.report_invoice_document_with_payments"
+                  inherit_id="account.report_invoice_document" primary="True">
+            <xpath expr="//table//tr[@id='amount_total']" position="after">
+                <t t-set="payments_vals" t-value="o._get_reconciled_info_JSON_values()"/>
+                <t t-foreach="payments_vals" t-as="payment_vals">
+                    <tr style="font-size:10pt">
+                        <td colspan="3"></td>
+                        <td style="padding: 5px">
+                            Paid on <t t-esc="payment_vals['date']" t-options='{"widget": "date"}'/>
+                        </td>
+                        <td class="text-right" style="padding: 5px">
+                            <span t-esc="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="len(payments_vals) > 0">
+                    <tr>
+                        <td colspan="3"></td>
+                        <td style="border-top:1px solid black; padding: 5px"><strong>Amount Due</strong></td>
+                        <td style="border-top:1px solid black; padding: 5px; text-align: right;">
+                             <strong><span t-field="o.amount_residual"/></strong>
+                        </td>
+                    </tr>
+                </t>
+            </xpath>
+        </template>
+
+        <record id="account.account_invoices" model="ir.actions.report">
+            <field name="paperformat_id" ref="paperformat_internal_layout_customize"/>
+            <field name="name">Invoices</field>
+        </record>
+
+        <record id="account.account_invoices_without_payment" model="ir.actions.report">
+            <field name="paperformat_id" ref="paperformat_internal_layout_customize"/>
+            <field name="name">Invoices without Payment</field>
+        </record>
+
+    </data>
+</odoo>

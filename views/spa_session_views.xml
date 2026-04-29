@@ -80,9 +80,46 @@
         </field>
     </record>
 
+
+    <record id="view_spa_session_pivot" model="ir.ui.view">
+        <field name="name">spa.session.pivot</field>
+        <field name="model">spa.session</field>
+        <field name="arch" type="xml">
+            <pivot string="Therapist Pivot">
+                <field name="therapist_id" type="row"/>
+                <field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>   
+
+    <record id="view_spa_session_search" model="ir.ui.view">
+        <field name="name">spa.session.search</field>
+        <field name="model">spa.session</field>
+        <field name="arch" type="xml">
+            <search string="Spa Session Search">
+                <field name="spa_order_id"/>
+                <field name="product_id"/>
+                <field name="therapist_id"/>
+                <field name="state"/>
+
+                <filter string="Today" name="today_session" 
+                domain="[
+                    ('start_time', '&gt;=', datetime.date.today().strftime('%Y-%m-%d 00:00:00')),
+                    ('start_time', '&lt;=', datetime.date.today().strftime('%Y-%m-%d 23:59:59'))
+                ]"/>
+            
+                <group expand="0" string="Group By">
+                    <filter string="Therapist" name="therapist" context="{'group_by': 'therapist_id'}" />
+                    <filter string="Status" name="state" context="{'group_by': 'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_spa_session" model="ir.actions.act_window">
         <field name="name">Spa Sessions</field>
         <field name="res_model">spa.session</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="context">{'search_default_today_session': 1}</field>
     </record>
 </odoo>

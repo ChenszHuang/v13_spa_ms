@@ -17,6 +17,7 @@
                         </group>
                         <group string="Journals" colspan="2">
                             <field name="default_invoice_journal_id"/>
+                            <field name="bank_account_no"/>
                         </group>
                     </group>
                 </page>
