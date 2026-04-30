@@ -33,6 +33,7 @@
         "reports/revenue_report.xml",
         "reports/receipt_report.xml",
         "reports/therapist_activity_report.xml",
+        "reports/payout_commission_report.xml",
         "reports/invoice_report.xml",
 
         #views
@@ -43,8 +44,11 @@
         "views/account_move_views.xml",
         "views/account_payment_views.xml",
         "views/spa_commission_views.xml",
+
+        #wizards
         "wizards/print_revenue_report.xml",
         "wizards/print_therapist_activity_report.xml",
+        "wizards/print_payout_commission_report.xml",
 
 
         "views/menu_views.xml",

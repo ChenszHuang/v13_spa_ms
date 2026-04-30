@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="payout_commission_report">
+            <t t-call="web.html_container">
+                <t t-call="web.internal_layout">
+                    <t t-set="report_title" t-value="'FAD'" />
+
+                    <t t-foreach="items" t-as="customer">
+
+                        <!-- PAGE BREAK setelah customer pertama -->
+                        <div
+                            t-att-style="'page-break-before: always;' if not customer_first else ''">
+
+                            <table style="width:100%; font-size:11pt;" cellpadding="0" border="0"
+                                cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <td style="font-weight:bold; font-size:14pt;" colspan="4">
+                                            PAYOUT COMMISSION REPORT
+                                        </td>
+                                        <td style="text-align:right;  padding-right:15px;"
+                                            colspan="3"> Period: <span
+                                                t-esc="date_from.strftime('%d/%m/%Y')" /> - <span
+                                                t-esc="date_to.strftime('%d/%m/%Y')" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="height:9px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="padding:2px 0; font-size:11pt;">
+                                            Customer: <strong t-esc="customer['customer_name']" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="height:12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="border-top:1px solid #000; border-bottom:1px solid #000; width:17%;">
+                                            Order</th>
+                                        <th
+                                            style="border-top:1px solid #000; border-bottom:1px solid #000; width:13%;">
+                                            Date</th>
+                                        <th
+                                            style="border-top:1px solid #000; border-bottom:1px solid #000; width:5%;">
+                                            Ref</th>
+                                        <th
+                                            style="border-top:1px solid #000; text-align:left; border-bottom:1px solid #000; width:28%;">
+                                            Treatment</th>
+                                        <th
+                                            style="border-top:1px solid #000; border-bottom:1px solid #000; text-align:center; width:7%;">
+                                            Qty</th>
+                                        <th
+                                            style="border-top:1px solid #000; border-bottom:1px solid #000; text-align:right; width:10%; padding-right:4px;">
+                                            Comms</th>
+                                        <th
+                                            style="border-top:1px solid #000; border-bottom:1px solid #000; text-align:right; width:15%; padding-right:4px;">
+                                            Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <t t-foreach="customer['guides']" t-as="guide">
+
+                                        <tr style="background-color:#f0f0f0;">
+                                            <td colspan="7"
+                                                style="padding:5px 4px; font-weight:bold;"> Guide: <t
+                                                    t-esc="guide['guide_name']" />
+                                            </td>
+                                        </tr>
+
+                                        <t t-foreach="guide['orders']" t-as="order">
+                                            <t t-foreach="order['treatments']" t-as="treatment">
+                                                <tr style="border-bottom:0.5px solid #ddd;">
+                                                    <t t-if="treatment_index == 0">
+                                                        <td
+                                                            style="padding:4px 4px; vertical-align:top; width:17%;"
+                                                            t-att-rowspan="order['_row_count']">
+                                                            <t t-esc="order['order_name']" />
+                                                        </td>
+                                                        <td
+                                                            style="padding:4px 0px; vertical-align:top; color:#000000; width:13%;"
+                                                            t-att-rowspan="order['_row_count']">
+                                                            <t
+                                                                t-esc="order['order_date'].strftime('%d/%m/%Y')" />
+                                                        </td>
+                                                        <td
+                                                            style="padding:4px 0px; vertical-align:top; color:#000000; width:13%;"
+                                                            t-att-rowspan="order['_row_count']">
+                                                            <t
+                                                                t-esc="order['ref']" />
+                                                        </td>
+                                                    </t>
+                                                    <td style="padding:4px 6px; width:10%;">
+                                                        <t t-esc="treatment['product_name']" />
+                                                    </td>
+                                                    <td
+                                                        style="text-align:center; padding:4px 6px; width:5%;">
+                                                        <t t-esc="treatment['qty']" />
+                                                    </td>
+                                                    <td
+                                                        style="text-align:right; padding:4px 6px;width:10%;">
+                                                        <t
+                                                            t-esc="'{:,.0f}'.format(treatment['commission_amount'])" />
+                                                    </td>
+                                                    <td
+                                                        style="text-align:right; padding:4px 5px;width:20%;">
+                                                        <t
+                                                            t-esc="'{:,.0f}'.format(treatment['total_commission'])" />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+
+                                        <!-- SUBTOTAL PER GUIDE -->
+                                        <tr
+                                            style="border-top:1px solid #aaa; border-bottom:1px solid #aaa;">
+                                            <td colspan="4"
+                                                style="padding:5px 6px; font-weight:bold; font-size:11pt;">
+                                                Subtotal </td>
+                                            <td
+                                                style="text-align:center; padding:5px 6px; font-weight:bold;">
+                                                <t t-esc="guide['total_qty']" />
+                                            </td>
+                                            <td></td>
+                                            <td
+                                                style="text-align:right; padding:5px 6px; font-weight:bold;">
+                                                <t
+                                                    t-esc="'{:,.0f}'.format(guide['total_commission'])" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" style="padding:4px 0;"></td>
+                                        </tr>
+
+                                    </t>
+
+                                    <!-- GRAND TOTAL PER CUSTOMER -->
+                                    <tr style="border-top:2px solid #000; background-color:#f0f0f0;">
+                                        <td colspan="4" style="padding:6px; font-weight:bold;">GRAND
+                                            TOTAL</td>
+                                        <td
+                                            style="text-align:center; padding:6px; font-weight:bold;">
+                                            <t t-esc="customer['total_qty']" />
+                                        </td>
+                                        <td></td>
+                                        <td style="text-align:right; padding:6px; font-weight:bold;">
+                                            <t
+                                                t-esc="customer['total_commission']"
+                                                t-options="{'widget': 'monetary', 'display_currency': company_id.currency_id}" />
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <report id="action_payout_commission_report"
+            model="print.payout.commission.report"
+            string="Payout Commission Report"
+            report_type="qweb-pdf"
+            name="v13_spa_ms.payout_commission_report"
+            file="v13_spa_ms.payout_commission_report"
+            print_report_name="(object._get_report_base_filename())" menu="False"
+            paperformat="v13_spa_ms.paperformat_internal_layout_customize" />
+    </data>
+</odoo>

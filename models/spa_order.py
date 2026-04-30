@@ -176,11 +176,19 @@ class SpaOrder(models.Model):
                     
                 product = session.product_id
                 partner = session.partner_id
-                commission = self.env['spa.commission'].search([
+                config = self.env['spa.commission'].search([
                     ('product_id', '=', product.id),
                     ('partner_id', '=', partner.id)
                 ], limit=1)
-                commission_rate = commission.amount 
+
+                price = session.product_price
+
+                if config:
+                    if config.commission_type == 'fixed':
+                        commission_total = config.amount
+                    else:
+                        commission_total = price * config.amount / 100
+
                 price = product.list_price
                 discount = session.discount or 0.0
                 
@@ -196,7 +204,7 @@ class SpaOrder(models.Model):
                         'product_id': product.id,
                         'name': product.name,
                         'price_unit': price,
-                        'commission_rate': commission_rate,
+                        'commission_rate': commission_total,
                         'quantity': 0,
                         'account_id': account.id,
                         'discount': discount,

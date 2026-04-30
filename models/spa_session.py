@@ -101,7 +101,7 @@ class SpaSession(models.Model):
                 ('product_id', '=', rec.product_id.id)
             ], limit=1)
 
-            price = rec.product_id.lst_price
+            price = rec.product_price
 
             if config:
                 if config.commission_type == 'fixed':

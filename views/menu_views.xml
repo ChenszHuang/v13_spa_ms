@@ -85,4 +85,9 @@
         parent="menu_spa_report"
         action="action_print_therapist_activity_report" sequence="5" />
 
+    <!-- Spa > Reporting > Payout Commission Report -->
+    <menuitem id="menu_spa_payout_commission_report" name="Payout Commission Report"
+        parent="menu_spa_report"
+        action="action_print_payout_commission_report" sequence="10" />
+
 </odoo>

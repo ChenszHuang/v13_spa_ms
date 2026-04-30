@@ -3,30 +3,31 @@
     <data>
         <record id="view_print_payout_commission_report_form" model="ir.ui.view">
             <field name="name">print.payout.commission.form</field>
-            <field name="model">print.payout.commission</field>
+            <field name="model">print.payout.commission.report</field>
             <field name="arch" type="xml">
                 <form string="Print Payout Commission Report">
                     <group>
                         <group>
-                            <label for="date_from" string="Date"/>
+                            <label for="date_from" string="Date" />
                             <div class="o_row">
-                                <field name="date_from" nolabel="1" class="oe_inline"/>
-                                <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
-                                <field name="date_to" nolabel="1" class="oe_inline"/>
+                                <field name="date_from" nolabel="1" class="oe_inline" />
+                                <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon"
+                                    title="Arrow" />
+                                <field name="date_to" nolabel="1" class="oe_inline" />
                             </div>
                         </group>
                     </group>
                     <footer>
-                        <button name="action_print" type="object" string="Print" class="btn-primary"/>
-                        <button string="Cancel" special="cancel"/>
+                        <button name="action_print" type="object" string="Print" class="btn-primary" />
+                        <button string="Cancel" special="cancel" />
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="action_print_revenue_report" model="ir.actions.act_window">
-            <field name="name">Revenue Report</field>
-            <field name="res_model">print.revenue.report</field>
+        <record id="action_print_payout_commission_report" model="ir.actions.act_window">
+            <field name="name">Payout Commission Report</field>
+            <field name="res_model">print.payout.commission.report</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
