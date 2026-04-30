@@ -12,6 +12,7 @@
                                 <table style="width:80%;">
                                     <t t-set="partner" t-value="o.partner_id"/>
                                     <t t-set="guide" t-value="o.guide_id or ''"/>
+                                    <t t-set="ref" t-value="o.ref or ''"/>
         
                                         <tr>
                                             <td style="width:14%; text-align:left; padding:2px;">Customer</td>
@@ -30,6 +31,15 @@
                                                 <td style="text-align:center; padding-left:7px;">:</td>
                                                 <td style="text-align:left; padding:2px;">
                                                     <span t-esc="guide.name or ''"/><br/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-if="ref">
+                                            <tr>
+                                                <td style="text-align:left; padding:2px;">Ref</td>
+                                                <td style="text-align:center; padding-left:7px;">:</td>
+                                                <td style="text-align:left; padding:2px;">
+                                                    <span t-esc="ref or ''"/><br/>
                                                 </td>
                                             </tr>
                                         </t>
@@ -109,17 +119,6 @@
                                 </td>
                             </tr>
                         </t>
-                        <tr>
-                            <td style="width:60%; padding:5px;">
-                                <strong>Remarks:</strong><br/>
-                                <span t-field="o.ref"/>
-                                <t t-if="not o.ref">
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                </t>
-                            </td>
-                        </tr>
                     </table>
                     <p>
                         No signature is required as this is a computer generated document.

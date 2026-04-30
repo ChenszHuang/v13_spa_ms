@@ -72,6 +72,10 @@
     <menuitem id="menu_spa_payments" name="Payments" parent="menu_spa_accounting"
         action="action_spa_payment" sequence="5" />
 
+    <!-- Spa > Accounting > Payments -->
+    <menuitem id="menu_spa_commission" name="Commissions" parent="menu_spa_accounting"
+        action="action_spa_commission" sequence="10" />
+
     <!-- Spa > Reporting > Revenue Report -->
     <menuitem id="menu_spa_revenue_report" name="Revenue Report" parent="menu_spa_report"
         action="action_print_revenue_report" sequence="0" />

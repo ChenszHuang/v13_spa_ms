@@ -40,8 +40,9 @@
         "views/spa_session_views.xml",
         "views/partner_views.xml",
         "views/product_views.xml",
-        "views/account_move.xml",
-        "views/account_payment.xml",
+        "views/account_move_views.xml",
+        "views/account_payment_views.xml",
+        "views/spa_commission_views.xml",
         "wizards/print_revenue_report.xml",
         "wizards/print_therapist_activity_report.xml",
 

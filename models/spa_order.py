@@ -28,7 +28,7 @@ class SpaOrder(models.Model):
 
     #api model
 
-    @api.depends('spa_session_ids')
+    @api.depends('spa_session_ids.state')
     def _compute_treatment_count(self):
         for record in self:
             confirmed_sessions = record.spa_session_ids.filtered(lambda s: s.state in ['ongoing', 'done'])

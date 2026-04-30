@@ -19,6 +19,11 @@ class ResPartner(models.Model):
     join_date = fields.Date(string="Join Date", tracking=True, copy=False)
     therapist_code = fields.Char(string="Therapist ID", tracking=True, copy=False)
     therapist_type = fields.Selection([('full_time', "Full Time"),('freelance', "Freelance")], string="Type" )
+    commission_ids = fields.One2many(
+        "spa.commission",
+        "partner_id",
+        string="Spa Commissions"
+    )
     
     
     @api.model

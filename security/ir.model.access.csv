@@ -7,3 +7,5 @@ access_treatment_type_erp_manager,treatment.type.erp.manager,model_treatment_typ
 access_treatment_type_erp_admin,treatment.type.erp.admin,model_treatment_type,v13_spa_ms.group_erp_admin,1,1,0,0
 access_product_template_erp_manager,product.template.erp.manager,model_product_template,v13_spa_ms.group_erp_manager,1,1,1,1
 access_product_template_erp_admin,product.template.erp.admin,model_product_template,v13_spa_ms.group_erp_admin,1,1,0,0
+access_spa_commission_erp_manager,spa.commission.erp.manager,model_spa_commission,v13_spa_ms.group_erp_manager,1,1,1,1
+access_spa_commission_erp_admin,spa.commission.erp.admin,model_spa_commission,v13_spa_ms.group_erp_admin,1,1,0,0

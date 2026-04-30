@@ -10,12 +10,13 @@ class SpaSession(models.Model):
     _order = "id desc"
 
     spa_order_id = fields.Many2one("spa.order", string="Spa Order", copy=False, tracking=True)
+    guide_id = fields.Many2one("res.partner", related="spa_order_id.guide_id", store=True, tracking=True)
     product_id = fields.Many2one("product.product", string="Treatment", copy=False, required=True, tracking=True)
     product_price = fields.Float(string="Price", readonly=True)
     duration = fields.Integer(string="Duration", related="product_id.duration")
-    discount = fields.Float(string="Discount",tracking=True, copy=False)
+    discount = fields.Float(string="Discount",tracking=True, copy=False, index=True)
     total_amount = fields.Float(string="Total", compute="_compute_total_amount", store="True")
-    therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True, tracking=True)
+    therapist_id = fields.Many2one("res.partner", string="Therapist", copy=False, required=True, tracking=True, index=True)
     state = fields.Selection([
         ("draft", "Draft"),
         ("wait", "Waiting"),
@@ -26,6 +27,9 @@ class SpaSession(models.Model):
     start_time = fields.Datetime(string="Start Time", default=fields.Datetime.now, tracking=True, required=True)
     end_time = fields.Datetime(string="End Time", compute="_compute_end_time", store=True, tracking=True, copy=False)
     remarks = fields.Text(string="Remarks", copy=False)
+    commission_amount = fields.Float(string="Commission Amount",compute="_compute_commission", store=True)
+    partner_id = fields.Many2one("res.partner", related="spa_order_id.partner_id", store=True, tracking=True)
+
 
 
     #api decorator
@@ -83,6 +87,27 @@ class SpaSession(models.Model):
         if self.product_id:
             self.product_price = self.product_id.list_price
             self.duration = self.product_id.duration
+    
+    @api.depends('product_id', 'spa_order_id.partner_id')
+    def _compute_commission(self):
+        for rec in self:
+            rec.commission_amount = 0
+
+            if not rec.product_id or not rec.spa_order_id.partner_id:
+                continue
+
+            config = self.env['spa.commission'].search([
+                ('partner_id', '=', rec.spa_order_id.partner_id.id),
+                ('product_id', '=', rec.product_id.id)
+            ], limit=1)
+
+            price = rec.product_id.lst_price
+
+            if config:
+                if config.commission_type == 'fixed':
+                    rec.commission_amount = config.amount
+                else:
+                    rec.commission_amount = price * config.amount / 100
 
     def name_get(self):
         result = []
