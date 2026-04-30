@@ -173,10 +173,17 @@ class SpaOrder(models.Model):
             for session in record.spa_session_ids:
                 if not session.product_id:
                     continue
-            
+                    
                 product = session.product_id
+                partner = session.partner_id
+                commission = self.env['spa.commission'].search([
+                    ('product_id', '=', product.id),
+                    ('partner_id', '=', partner.id)
+                ], limit=1)
+                commission_rate = commission.amount 
                 price = product.list_price
                 discount = session.discount or 0.0
+                
                 key = (product.id, price, discount)
                 
                 if key not in groups:
@@ -189,6 +196,7 @@ class SpaOrder(models.Model):
                         'product_id': product.id,
                         'name': product.name,
                         'price_unit': price,
+                        'commission_rate': commission_rate,
                         'quantity': 0,
                         'account_id': account.id,
                         'discount': discount,

@@ -10,6 +10,7 @@ class AccountMove(models.Model):
     therapist_id = fields.Many2one("res.partner", string="Therapist", tracking=True, copy=False)
     payment_ids = fields.Many2many('account.payment', string="Payments", compute='_compute_payment_ids',store=False)
     guide_id = fields.Many2one('res.partner', string="Guide", tracking=True, copy=False)
+    commission = fields.Float(string="Commission", compute="_compute_commission", store=True, tracking=True)
 
     def _compute_payment_ids(self):
         for move in self:
@@ -75,10 +76,33 @@ class AccountMove(models.Model):
                 info['title'] = type_payment
                 move.invoice_outstanding_credits_debits_widget = json.dumps(info)
                 move.invoice_has_outstanding = True
+    
+    
+    @api.depends('invoice_line_ids', 'invoice_line_ids.commission_amount')
+    def _compute_commission(self):
+        for record in self:
+            total_commission = 0
+            for line in record.invoice_line_ids:
+                total_commission += line.commission_amount 
+                
+            record.commission = total_commission
+                
+                
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
-
+    
+    commission_rate = fields.Float(string="Commission")
+    commission_amount = fields.Float(string="Commission Amount", compute="_compute_commission_amount", store=True)
+    
+    
+    @api.depends('commission_rate', 'quantity')
+    def _compute_commission_amount(self):
+        for line in self:
+            if line.commission_rate:
+                line.commission_amount = line.commission_rate * line.quantity
+            else:
+                line.commission_amount = 0.0
 
     def _get_computed_account(self):
         account = super()._get_computed_account()
