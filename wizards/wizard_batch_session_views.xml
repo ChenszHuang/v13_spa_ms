@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ==================== WIZARD FORM VIEW ==================== -->
+        <record id="view_wizard_batch_session_form" model="ir.ui.view">
+            <field name="name">wizard.batch.session.form</field>
+            <field name="model">wizard.batch.session</field>
+            <field name="arch" type="xml">
+                <form string="Batch Input Sesi">
+                    <sheet>
+                        <field name="spa_order_id" />
+                        <newline />
+                        <label for="line_ids" string="test" />
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="product_id" options="{'no_create': True}" />
+                                <field name="product_price" string="Price" readonly="1" />
+                                <field name="discount" string="Disc (%)" />
+                                <field name="start_time" widget="datetime" />
+                                <field name="duration" readonly="1" />
+                                <field name="end_time" widget="datetime" readonly="1" />
+                                <field name="therapist_ids"
+                                    widget="many2many_tags"
+                                    options="{'no_create': True}"
+                                    string="Therapists" />
+                                <field name="qty" string="Qty" readonly="1" />
+                            </tree>
+                        </field>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm"
+                            string="Generate Sessions"
+                            type="object"
+                            class="btn-primary" />
+                        <button string="Batal" special="cancel" class="btn-secondary" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================== ACTION ==================== -->
+        <record id="action_wizard_batch_session" model="ir.actions.act_window">
+            <field name="name">Batch Input Sesi</field>
+            <field name="res_model">wizard.batch.session</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_spa_order_id': active_id}</field>
+        </record>
+
+
+    </data>
+</odoo>

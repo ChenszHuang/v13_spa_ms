@@ -44,6 +44,7 @@
         "views/account_move_views.xml",
         "views/account_payment_views.xml",
         "views/spa_commission_views.xml",
+        "wizards/wizard_batch_session_views.xml",
 
         #wizards
         "wizards/print_revenue_report.xml",

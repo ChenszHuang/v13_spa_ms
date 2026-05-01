@@ -63,7 +63,15 @@
                                 <field name="treatment_count" />
                             </group>
                             <group>
-                                <label for="spa_session_ids" string="Treatment Sessions" />
+                                <group>
+                                    <label name="spa_ses" for="spa_session_ids"
+                                        string="Treatment Sessions" />
+                                    <button name="%(action_wizard_batch_session)d"
+                                        string="Generate"
+                                        type="action"
+                                        class="btn btn-sm btn-primary"
+                                        attrs="{'invisible': [('state', 'in', ['done', 'cancel'])]}" />
+                                </group>
                                 <newline />
                                 <field name="spa_session_ids" nolabel="1"
                                     attrs="{'readonly': [('state', 'in', ['done','cancel'])]}"
