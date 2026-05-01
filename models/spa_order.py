@@ -182,6 +182,8 @@ class SpaOrder(models.Model):
                 ], limit=1)
 
                 price = session.product_price
+                
+                commission_total = 0
 
                 if config:
                     if config.commission_type == 'fixed':
