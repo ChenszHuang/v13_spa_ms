@@ -63,10 +63,10 @@
                                 <field name="treatment_count" />
                             </group>
                             <group>
-                                <group>
+                                <group name="label_session">
                                     <label name="spa_ses" for="spa_session_ids"
                                         string="Treatment Sessions" />
-                                    <button name="%(action_wizard_batch_session)d"
+                                    <button name="%(v13_spa_ms.action_wizard_batch_session)d"
                                         string="Generate"
                                         type="action"
                                         class="btn btn-sm btn-primary"

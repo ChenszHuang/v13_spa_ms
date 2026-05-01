@@ -49,5 +49,26 @@
         </record>
 
 
+        <!-- ==================== INHERIT SPA ORDER FORM ==================== -->
+        <record id="view_spa_order_form_inherit_batch_btn" model="ir.ui.view">
+            <field name="name">spa.order.form.inherit.batch.btn</field>
+            <field name="model">spa.order</field>
+            <field name="inherit_id" ref="v13_spa_ms.view_spa_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='label_session']" position="replace">
+                    <group name="label_session">
+                        <label name="spa_ses" for="spa_session_ids"
+                            string="Treatment Sessions" />
+                        <button name="%(action_wizard_batch_session)d"
+                            string="Generate Session"
+                            type="action"
+                            class="btn btn-sm btn-primary"
+                            attrs="{'invisible': [('state', 'in', ['done', 'cancel'])]}" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
     </data>
 </odoo>
