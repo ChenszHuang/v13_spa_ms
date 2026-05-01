@@ -11,6 +11,7 @@
                 <field name="partner_id" />
                 <field name="guide_id" />
                 <field name="treatment_count" sum="Total Treatment" />
+                <field name="total_amount"/>
                 <field name="state" />
             </tree>
         </field>
@@ -61,6 +62,7 @@
                         <page string="Sessions">
                             <group>
                                 <field name="treatment_count" />
+                                <field name="total_amount"/>
                             </group>
                             <group>
                                 <group name="label_session">

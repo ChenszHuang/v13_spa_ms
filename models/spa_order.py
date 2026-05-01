@@ -15,7 +15,8 @@ class SpaOrder(models.Model):
     spa_session_ids = fields.One2many("spa.session", "spa_order_id", string="Spa Sessions", copy=False)
     reference = fields.Char(string="Reference")
     treatment_count = fields.Integer(string="Treatment Count", compute="_compute_treatment_count", store=True)
-    
+    total_amount = fields.Float(string="Amount", compute="_compute_total_session_amount", store=True)
+
     state = fields.Selection([
         ("draft", "Draft"),
         ("wait", "Waiting List"),
@@ -33,6 +34,16 @@ class SpaOrder(models.Model):
         for record in self:
             confirmed_sessions = record.spa_session_ids.filtered(lambda s: s.state in ['ongoing', 'done'])
             record.treatment_count = len(confirmed_sessions)
+
+    @api.depends('spa_session_ids.total_amount', 'spa_session_ids.product_id', 'spa_session_ids')
+    def _compute_total_session_amount(self):
+        for record in self:
+            total = 0.0
+            for session in record.spa_session_ids:
+                total += session.total_amount
+
+            record.total_amount = total
+
 
     @api.model
     def default_get(self, fields):
