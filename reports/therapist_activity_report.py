@@ -109,7 +109,7 @@ class TherapistActivityAbstract(models.AbstractModel):
             WHERE
                 DATE(ss.start_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Jakarta') >= %(date_from)s
                 AND DATE(ss.start_time AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Jakarta') <= %(date_to)s
-                AND so.state in ('confirm', 'done)
+                AND so.state in ('confirm', 'done')
                 AND ss.state = 'done'
             GROUP BY
                 ss.therapist_id,
