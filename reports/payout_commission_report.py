@@ -18,6 +18,8 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
         
         grand_total = {
         'qty': sum(g['total_qty'] for g in items),
+        'amount': sum(g['total_amount'] for g in items),
+        'commission': sum(g['total_commission'] for g in items),
     }
         
         return {
@@ -42,6 +44,7 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
                 customers[cid] = {
                     'customer_name': row['customer_name'],
                     'total_qty': 0,
+                    'total_amount': 0.0,
                     'total_commission': 0.0,
                     'guides': {},
                 }
@@ -53,6 +56,7 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
                 c['guides'][gid] = {
                     'guide_name': row['guide_name'],
                     'total_qty': 0,
+                    'total_amount': 0.0,
                     'total_commission': 0.0,
                     'orders': {},
                 }
@@ -66,6 +70,7 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
                     'order_date': row['order_date'],
                     'ref': row['order_ref'],
                     'total_qty': 0,
+                    'total_amount': 0.0,
                     'total_commission': 0.0,
                     'treatments': [],
                     '_row_count': 0,
@@ -75,19 +80,24 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
 
             o['treatments'].append({
                 'product_name': row['product_name'],
+                'price': row['product_price'],
                 'qty': row['qty'],
+                'total_amount': row['total_amount'],
                 'commission_amount': row['commission_amount'],
                 'total_commission': row['total_commission'],
             })
 
             o['_row_count']       += 1
             o['total_qty']        += row['qty']
+            o['total_amount']     += row['total_amount']
             o['total_commission'] += row['total_commission']
 
             g['total_qty']        += row['qty']
+            g['total_amount']     += row['total_amount']
             g['total_commission'] += row['total_commission']
 
             c['total_qty']        += row['qty']
+            c['total_amount']     += row['total_amount']
             c['total_commission'] += row['total_commission']
 
         # convert ke list
@@ -119,9 +129,10 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
                 so.reference AS order_ref,
                 so.date AS order_date,
                 pt.name AS product_name,
+                ss.product_price,
                 ss.commission_amount,
                 COUNT(ss.id) AS qty,
-                COALESCE(ss.commission_amount, 0) AS commission_amount,
+                COALESCE(SUM(ss.total_amount), 0) AS total_amount,
                 COALESCE(SUM(ss.commission_amount), 0) AS total_commission
             FROM spa_session ss
                 INNER JOIN spa_order so ON so.id = ss.spa_order_id
@@ -142,7 +153,7 @@ class PayoutCommissionReportAbstract(models.AbstractModel):
                 so.guide_id, rg.ref, rg.name,
                 so.id, so.number, so.date,
                 pt.id, pt.name,
-                ss.commission_amount, so.reference
+                ss.commission_amount, so.reference, ss.product_price
             HAVING 
                 COALESCE(SUM(ss.commission_amount), 0) > 0
             ORDER BY

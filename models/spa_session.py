@@ -29,7 +29,7 @@ class SpaSession(models.Model):
     remarks = fields.Text(string="Remarks", copy=False)
     commission_amount = fields.Float(string="Commission Amount",compute="_compute_commission", store=True)
     partner_id = fields.Many2one("res.partner", related="spa_order_id.partner_id", store=True, tracking=True)
-
+    guide_id = fields.Many2one("res.partner", related="spa_order_id.guide_id", store=True, tracking=True)
 
 
     #api decorator
